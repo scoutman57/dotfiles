@@ -301,8 +301,8 @@
     #   finderShowHidden:   Show hidden files in Finder
     #   finderHideHidden:   Hide hidden files in Finder
     #   -------------------------------------------------------------------
-    alias finderShowHidden='defaults write com.apple.finder ShowAllFiles TRUE'
-    alias finderHideHidden='defaults write com.apple.finder ShowAllFiles FALSE'
+    alias finderShowHidden='defaults write com.apple.finder AppleShowAllFiles -bool YES; killall -HUP Finder'
+    alias finderHideHidden='defaults write com.apple.finder AppleShowAllFiles -bool NO; killall -HUP Finder'
 
     #   cleanupLS:  Clean up LaunchServices to remove duplicates in the "Open With" menu
     #   -----------------------------------------------------------------------------------
