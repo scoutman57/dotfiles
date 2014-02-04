@@ -32,6 +32,7 @@
 #   Set Paths
 #   ------------------------------------------------------------
     # Ensure user-installed binaries take precedence
+    export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:$PATH"
     export PATH="/usr/local/bin:$PATH"
     export PATH="/usr/local/git/bin:/sw/bin:/usr/local/bin:/usr/local:/usr/local/sbin:$PATH"
 
