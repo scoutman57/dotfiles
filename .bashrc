@@ -144,10 +144,10 @@
         echo "What's the email associated with it? ";
         read email;
 
-        `ssh-keygen -t rsa -f ~/.ssh/id_rsa_$name -C "$email"`;
+        ssh-keygen -t rsa -f ~/.ssh/id_rsa_$name -C "$email";
         pbcopy < ~/.ssh/id_rsa_$name.pub;
 
-        echo "SSH Key copied in your clipboard";
+        echo "SSH Public Key copied to your clipboard";
     }
 
 
