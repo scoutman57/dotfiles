@@ -2,6 +2,10 @@
 #
 #  Description:  This file holds all my BASH configurations and aliases
 #
+#  ***NOTE*** for OSX you will need the following installed vi homebrew
+#  brew install coreutils
+#  brew install gnu-sed --default-names
+#
 #  Sections:
 #  1.   Environment Configuration
 #  2.   Make Terminal Better (remapping defaults and adding functionality)
@@ -436,7 +440,8 @@
         if ! echo "$message" | grep -Eq "^$branch" ; then
             message="$branch: $message"
         fi
-        echo git commit -m "$message"
+        echo "git commit -m '$message'"
+        git commit -m "'$message'"
     }
     
     # git push pub <current-branch>
@@ -447,6 +452,7 @@
             echo "You are not inside of a git repository, or HEAD is detached." 1>&2
             return 1
         fi
+        echo "git push pub $branch"
         git push pub "$branch"
     }
 
