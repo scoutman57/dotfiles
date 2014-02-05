@@ -26,6 +26,10 @@
 #    export PS1="________________________________________________________________________________\n| \w @ \h (\u) \n| => "
 #    export PS2="| => "
 
+#   Set Colors
+    bold=$(tput -Txterm bold)
+    reset=$(tput -Txterm sgr0)
+
 #   Set architecture flags
      export ARCHFLAGS="-arch x86_64"
 
@@ -37,7 +41,7 @@
     export PATH="/usr/local/git/bin:/sw/bin:/usr/local/bin:/usr/local:/usr/local/sbin:$PATH"
 
     # Conditionally add some things to $PATH, if they exist.
-    for d in ~/bin ~/usr/bin ~/ims_v3/Bin ; do
+    for d in ~/bin ~/usr/bin ; do
       if test -d "$d" && ! echo "$PATH" | grep -q $(readlink -e "$d") ; then
         PATH="$d":"$PATH"
       fi
@@ -156,9 +160,49 @@
 #   3.  FILE AND FOLDER MANAGEMENT
 #   -------------------------------
 
+    # Lets figure out what out what type of source control we are using.
+    __has_parent_dir () {
+       # Utility function so we can test for things like .git/.hg without firing
+       # up a separate process
+       test -d "$1" && return 0;
+
+       current="."
+       while [ ! "$current" -ef "$current/.." ]; do
+           if [ -d "$current/$1" ]; then
+               return 0;
+           fi
+           current="$current/..";
+       done
+
+       return 1;
+    }
+
+    __vcs_name() {
+       if [ -d .svn ]; then
+           echo "-[svn]";
+       elif __has_parent_dir ".git"; then
+           echo "($(__git_ps1 'git:%s'))";
+       elif __has_parent_dir ".hg"; then
+           echo "(hg:$(hg branch))"
+       fi
+    }
+
+
     # Set up a colorful command prompt,
     # with the current git branch and the current directory.
-    export PS1="\[\e[1;31m\]\u\[\e[0;37m\]@\[\e[1;32m\]\h\[\e[1;36m\] \`git rev-parse --abbrev-ref HEAD 2>/dev/null | sed 's/$/ /'\`\[\e[1;34m\]\w \[\e[1;35m\]\$ \[\e[0;37m\]"
+    # curl https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
+    source ~/.git-prompt.sh
+
+
+
+    # For a command prompt display like:
+    # JDoe@JDoes-MacBook-Pro Jira-1327 ~/Code/MyProject $
+    #export PS1="\[\e[1;31m\]\u\[\e[0;37m\]@\[\e[1;32m\]\h\[\e[1;36m\] \`git rev-parse --abbrev-ref HEAD 2>/dev/null | sed 's/$/ /'\`\[\e[1;34m\]\w \[\e[1;35m\]\$ \[\e[0;37m\]"
+    
+    # For a command prompt display like:
+    # JDoe@JDoes-MacBook-Pro[~/Code/MyProject](git:Jira-1327)
+    # $
+    export PS1='\e[1;31m\]\u\[\e[0;37m\]@\[\e[1;32m\]\h\[$black\][\[\e[1;34m\]\w\[$black\]]\[\e[1;36m\]$(__vcs_name)\[$reset\]\n\[$reset\]\$ '
 
     zipf () { zip -r "$1".zip "$1" ; }          # zipf:         To create a ZIP archive of a folder
     #alias numFiles='echo $(ls -1 | wc -l)'      # numFiles:     Count of non-hidden files in current dir
