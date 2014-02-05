@@ -29,6 +29,11 @@
 #   Set Colors
     bold=$(tput -Txterm bold)
     reset=$(tput -Txterm sgr0)
+    NO_COLOR="\[\033[00m\]"
+    GREEN="\[\033[0;32m\]"
+    RED="\[\033[0;31m\]"
+    YELLOW="\[\033[0;33m\]"
+    LIGHT_CYAN="\[\033[0;36m\]"
 
 #   Set architecture flags
      export ARCHFLAGS="-arch x86_64"
@@ -203,6 +208,10 @@
     # JDoe@JDoes-MacBook-Pro[~/Code/MyProject](git:Jira-1327)
     # $
     export PS1='\e[1;31m\]\u\[\e[0;37m\]@\[\e[1;32m\]\h\[$black\][\[\e[1;34m\]\w\[$black\]]\[\e[1;36m\]$(__vcs_name)\[$reset\]\n\[$reset\]\$ '
+
+    # For a command prompt display like:
+    # [JDoe@JDoes-MacBook-Pro:~/Code/MyProject (git:Jira-1327)]$
+    export PS1="[$LIGHT_CYAN\u$RED@\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN\$(__vcs_name)$NO_COLOR)]$ "
 
     zipf () { zip -r "$1".zip "$1" ; }          # zipf:         To create a ZIP archive of a folder
     #alias numFiles='echo $(ls -1 | wc -l)'      # numFiles:     Count of non-hidden files in current dir
@@ -427,7 +436,24 @@
             echo "You are not inside of a git repository, or HEAD is detached." 1>&2
             return 1
         fi
-        git commit -m "$branch $1"
+        message="$1"
+        # trim whitespace
+        message=$(echo "$message" | sed 's/^[ \t]*//;s/[ \t]*$//')
+        if ! echo "$message" | grep -Eq "^$branch" ; then
+            message="$branch: $message"
+        fi
+        echo git commit -m "$message"
+    }
+    
+    # git push pub <current-branch>
+    gpp()
+    {
+        branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+        if test -z "$branch" ; then
+            echo "You are not inside of a git repository, or HEAD is detached." 1>&2
+            return 1
+        fi
+        git push pub "$branch"
     }
 
 #   ---------------------------------------
