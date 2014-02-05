@@ -387,10 +387,8 @@
     }
 
 #   ---------------------------------------
-#   Company
+#   Included dotfiles for specific servers
+#   or for sensitive information
 #   ---------------------------------------
 
-    sshTo(){
-    	ssh -t devapp151 "cd ~/ims_v3_wc/$1; bash; setticket $1"
-    }
-    alias sshTo=sshTo
+    source "/Users/$(whoami)/Google Drive/.private"
