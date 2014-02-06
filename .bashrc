@@ -55,14 +55,14 @@
     # For a command prompt display like:
     # JDoe@JDoes-MacBook-Pro[~/Code/MyProject](git:Jira-1327)
     # $
-    export PS1='\e[1;31m\]\u\[\e[0;37m\]@\[\e[1;32m\]\h\[$black\][\[\e[1;34m\]\w\[$black\]]\[\e[1;36m\]$(__vcs_name)\[$reset\]\n\[$reset\]\$ '
+    #export PS1='\e[1;31m\]\u\[\e[0;37m\]@\[\e[1;32m\]\h\[$black\][\[\e[1;34m\]\w\[$black\]]\[\e[1;36m\]$(__vcs_name)\[$reset\]\n\[$reset\]\$ '
 
     # For a command prompt display like:
     # [JDoe@JDoes-MacBook-Pro:~/Code/MyProject (git:Jira-1327)]$
-    export PS1="[$LIGHT_CYAN\u$RED@\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN\$(__vcs_name)$NO_COLOR)]$ "
+    export PS1="[$LIGHT_CYAN\u$RED@\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN\$(__vcs_name)$NO_COLOR]$ "
 
     #   Set architecture flags
-     export ARCHFLAGS="-arch x86_64"
+    #export ARCHFLAGS="-arch x86_64"
 
     #   Set Paths
     #   ------------------------------------------------------------
