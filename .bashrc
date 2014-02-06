@@ -441,7 +441,7 @@
             message="$branch: $message"
         fi
         echo "git commit -m '$message'"
-        git commit -m "'$message'"
+        git commit -m "$message"
     }
     
     # git push pub <current-branch>
