@@ -121,7 +121,12 @@
 
     # grabs the latest .bash_profile file and reloads the prompt
     alias updatebashrc="curl https://raw.github.com/w2pc/dotfiles/master/.bashrc > ~/.bashrc && reload"
-
+    
+    alias ls='ls --color=auto'                  # Preferred 'ls' implementation
+    alias dir='dir --color=auto'                # Preferred 'dir' implementation
+    alias vdir='vdir --color=auto'              # Preferred 'vdir' implementation
+    alias grep='grep --color=auto'              # Preferred 'grep' implementation
+    alias fgrep='fgrep --color=auto'            # Preferred 'fgrep' implementation
     alias cp='cp -iv'                           # Preferred 'cp' implementation
     alias mv='mv -iv'                           # Preferred 'mv' implementation
     alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
