@@ -388,7 +388,7 @@
 
 #   ---------------------------------------
 #   10.  VERSION CONTROL SYSTEMS
-#   ---------------------------------------   
+#   ---------------------------------------
     curl https://raw.github.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.sh
     source ~/.git-completion.sh
 
@@ -461,6 +461,18 @@
         fi
         echo "git push pub $branch"
         git push pub "$branch"
+    }
+
+    # git push <current-branch>
+    gp()
+    {
+        branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+        if test -z "$branch" ; then
+            echo "You are not inside of a git repository, or HEAD is detached." 1>&2
+            return 1
+        fi
+        echo "git push s$branch"
+        git push "$branch"
     }
 
 #   ---------------------------------------
