@@ -421,7 +421,7 @@
        if [ -d .svn ]; then
            echo "-[svn]";
        elif __has_parent_dir ".git"; then
-           echo "($(__git_ps1 'git:%s'))";
+           __git_ps1 'git:%s' | sed 's/^/\(/;s/$/\)/';
        elif __has_parent_dir ".hg"; then
            echo "(hg:$(hg branch))"
        fi
