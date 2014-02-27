@@ -59,7 +59,7 @@
 
     # For a command prompt display like:
     # [JDoe@JDoes-MacBook-Pro:~/Code/MyProject (git:Jira-1327)]$
-    export PS1="[$LIGHT_CYAN\u$RED@\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN\$(__vcs_name)$NO_COLOR]$ "
+    export PS1="[$LIGHT_CYAN\u$RED@\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN\$(vcsprompt)$NO_COLOR]$ "
 
     #   Set architecture flags
     #export ARCHFLAGS="-arch x86_64"
@@ -389,10 +389,10 @@
 #   ---------------------------------------
 #   10.  VERSION CONTROL SYSTEMS
 #   ---------------------------------------
-    curl https://raw.github.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.sh
+    #curl https://raw.github.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.sh
     source ~/.git-completion.sh
 
-    curl https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
+    #curl https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
     source ~/.git-prompt.sh
 
         # Git - compact, colorized git log
@@ -426,6 +426,19 @@
            echo "(hg:$(hg branch))"
        fi
     }
+
+    vcsgetbranch()
+    {
+        git rev-parse --abbrev-ref HEAD | sed 's/^/git:/' ||
+        hg branch | sed 's/^/hg:/' ||
+        svn info | sed '/^Repository Root: /s/^.*: //' | sed 's/^/svn:/'
+    }
+
+    vcsprompt()
+    {
+        vcsgetbranch 2>/dev/null | sed 's/^/\(/;s/$/\) /'
+    }
+
 
     #   GIT Functions
     #   ---------------------------------------
