@@ -324,7 +324,7 @@
 
     #   cleanup:  Recursively delete .DS_Store & Thumbs.db files
     #   -------------------------------------------------------------------
-    alias cleanup="find . -name '*.DS_Store' -type f -ls -delete && find . -name 'Thumbs.db' -type f -ls -delete"
+    alias cleanup="find . -name '*.DS_Store' -type f -ls -delete && find . -name 'Thumbs.db' -type f -ls -delete && find . -name 'desktop.ini' -type f -ls -delete"
 
     #   finderShowHidden:   Show hidden files in Finder
     #   finderHideHidden:   Hide hidden files in Finder
@@ -389,10 +389,10 @@
 #   ---------------------------------------
 #   10.  VERSION CONTROL SYSTEMS
 #   ---------------------------------------
-    #curl https://raw.github.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.sh
+    curl https://raw.github.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.sh
     source ~/.git-completion.sh
 
-    #curl https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
+    curl https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
     source ~/.git-prompt.sh
 
         # Git - compact, colorized git log
