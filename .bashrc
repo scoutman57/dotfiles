@@ -391,7 +391,7 @@
 #   ---------------------------------------
 #   10.  VERSION CONTROL SYSTEMS
 #   ---------------------------------------
-    # curl https://raw.github.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.sh
+    # curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.sh
     source ~/.git-completion.sh
 
     # curl https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
