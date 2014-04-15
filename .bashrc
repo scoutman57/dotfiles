@@ -355,6 +355,8 @@
     #   -------------------------------------------------------------------
     httpDebug () { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
 
+    #   tail serveral logs
+    alias tailErrors="find ~/ims_v3/Logs/`date +'%Y%m%d'`/ | grep \"\.log\" | xargs tail -f /tmp/phperrors.log /var/log/httpd/*error*_log ~/ims_v3/Logs/Bin/Billing/daily_billing.`date +'%Y%m%d'`"
 
 #   ---------------------------------------
 #   9.  REMINDERS & NOTES
@@ -389,10 +391,10 @@
 #   ---------------------------------------
 #   10.  VERSION CONTROL SYSTEMS
 #   ---------------------------------------
-    curl https://raw.github.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.sh
+    # curl https://raw.github.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.sh
     source ~/.git-completion.sh
 
-    curl https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
+    # curl https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
     source ~/.git-prompt.sh
 
         # Git - compact, colorized git log
