@@ -97,6 +97,7 @@
     #   Set Default Diff (change 'phpstorm' to the editor of your choice)
     #   ------------------------------------------------------------       
         # opens file or folder with the default diff tool
+        # diff <path to file1> <path to file2> 
         diff()
         {
             phpstorm diff $(realpath "$1") $(realpath "$2")
@@ -106,6 +107,8 @@
     #   Set Default Merge (change 'phpstorm' to the editor of your choice)
     #   ------------------------------------------------------------       
         # opens file with the default merge tool
+        # merge <path to file1> <path to file2> <path to file3> <path to output>
+        # file3 is the base revision for file1 and file2, file4 (output) is the file to save the merge results in (optional)
         merge()
         {
             phpstorm merge $(realpath "$1") $(realpath "$2") $(realpath "$3") $(realpath "$4")
