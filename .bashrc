@@ -68,8 +68,8 @@
     #   ------------------------------------------------------------
     # Ensure user-installed binaries take precedence
     export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:$PATH"
-    export PATH="/usr/local/bin:$PATH"
     export PATH="/usr/local/git/bin:/sw/bin:/usr/local/bin:/usr/local:/usr/local/sbin:$PATH"
+    export PATH="/Applications/PhpStorm EAP.app/Contents/MacOS:$PATH"
 
     # Conditionally add some things to $PATH, if they exist.
     for d in ~/bin ~/usr/bin ; do
@@ -87,12 +87,30 @@
     export LD_LIBRARY_PATH
 
 
-    #   Set Default Editor (change 'Nano' to the editor of your choice)
+    #   Set Default Editor (change 'Sublime Text' to the editor of your choice)
     #   ------------------------------------------------------------
         export EDITOR=/usr/bin/vi
         
         # opens file or folder with sublime
         alias sublime='open -a "Sublime Text"'
+
+    #   Set Default Diff (change 'phpstorm' to the editor of your choice)
+    #   ------------------------------------------------------------       
+        # opens file or folder with the default diff tool
+        diff()
+        {
+            phpstorm diff $(realpath "$1") $(realpath "$2")
+            echo "Diff: $(realpath $1) $(realpath $2) $(realpath $3) $(realpath $4)"
+        }
+
+    #   Set Default Merge (change 'phpstorm' to the editor of your choice)
+    #   ------------------------------------------------------------       
+        # opens file with the default merge tool
+        merge()
+        {
+            phpstorm merge $(realpath "$1") $(realpath "$2") $(realpath "$3") $(realpath "$4")
+            echo "Merge: $(realpath $1) $(realpath $2) $(realpath $3) $(realpath $4)"
+        }    
 
     #   Set default blocksize for ls, df, du
     #   from this: http://hints.macworld.com/comment.php?mode=view&cid=24491
@@ -140,7 +158,7 @@
     alias .4='cd ../../../../'                  # Go back 4 directory levels
     alias .5='cd ../../../../../'               # Go back 5 directory levels
     alias .6='cd ../../../../../../'            # Go back 6 directory levels
-    alias edit='sublime'                        # edit:         Opens any file in sublime editor
+    alias edit='sublime'                           # edit:         Opens any file in sublime editor
     alias f='open -a Finder ./'                 # f:            Opens current directory in MacOS Finder
     alias ~="cd ~"                              # ~:            Go Home
     alias c='clear'                             # c:            Clear terminal display
@@ -355,8 +373,6 @@
     #   -------------------------------------------------------------------
     httpDebug () { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
 
-    #   tail serveral logs
-    alias tailErrors="find ~/ims_v3/Logs/`date +'%Y%m%d'`/ | grep \"\.log\" | xargs tail -f /tmp/phperrors.log /var/log/httpd/*error*_log ~/ims_v3/Logs/Bin/Billing/daily_billing.`date +'%Y%m%d'`"
 
 #   ---------------------------------------
 #   9.  REMINDERS & NOTES
@@ -391,7 +407,7 @@
 #   ---------------------------------------
 #   10.  VERSION CONTROL SYSTEMS
 #   ---------------------------------------
-    # curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.sh
+    # curl https://raw.github.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.sh
     source ~/.git-completion.sh
 
     # curl https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
