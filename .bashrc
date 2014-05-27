@@ -58,6 +58,10 @@
     #export PS1='\e[1;31m\]\u\[\e[0;37m\]@\[\e[1;32m\]\h\[$black\][\[\e[1;34m\]\w\[$black\]]\[\e[1;36m\]$(__vcs_name)\[$reset\]\n\[$reset\]\$ '
 
     # For a command prompt display like:
+    # JDoe@JDoes-MacBook-Pro Jira-1327 ~/Code/MyProject $
+    export PS1="\[\e[1;31m\]\u\[\e[0;37m\]@\[\e[1;32m\]\h\[\e[1;36m\] \`git rev-parse --abbrev-ref HEAD 2>/dev/null | sed 's/$/ /'\`\[\e[1;34m\]\w \[\e[1;35m\]\$ \[\e[0;37m\]"
+
+    # For a command prompt display like:
     # [JDoe@JDoes-MacBook-Pro:~/Code/MyProject (git:Jira-1327)]$
     export PS1="[$LIGHT_CYAN\u$RED@\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN\$(vcsprompt)$NO_COLOR]$ "
 
@@ -67,9 +71,15 @@
     #   Set Paths
     #   ------------------------------------------------------------
     # Ensure user-installed binaries take precedence
-    export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:$PATH"
+    export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
+    export PATH="$(brew --prefix homebrew/php/php55)/bin:$PATH"
     export PATH="/usr/local/git/bin:/sw/bin:/usr/local/bin:/usr/local:/usr/local/sbin:$PATH"
     export PATH="/Applications/PhpStorm EAP.app/Contents/MacOS:$PATH"
+
+    #set ruby manager from homebrew
+    export RBENV_ROOT=/usr/local/var/rbenv
+    eval "$(rbenv init -)"
+    if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
     # Conditionally add some things to $PATH, if they exist.
     for d in ~/bin ~/usr/bin ; do
@@ -86,6 +96,10 @@
     done
     export LD_LIBRARY_PATH
 
+    # Add bash-completion if installed from homebrew
+    if [ -f $(brew --prefix)/etc/bash_completion ]; then
+        . $(brew --prefix)/etc/bash_completion
+    fi
 
     #   Set Default Editor (change 'Sublime Text' to the editor of your choice)
     #   ------------------------------------------------------------
@@ -113,7 +127,7 @@
         {
             phpstorm merge $(realpath "$1") $(realpath "$2") $(realpath "$3") $(realpath "$4")
             echo "Merge: $(realpath $1) $(realpath $2) $(realpath $3) $(realpath $4)"
-        }    
+        }     
 
     #   Set default blocksize for ls, df, du
     #   from this: http://hints.macworld.com/comment.php?mode=view&cid=24491
@@ -423,7 +437,7 @@
 
     # Lets figure out what out what type of source control we are using.
     __has_parent_dir () {
-       # Utility function so we can test for things like .git/.hg without firing
+       # Utility function so we can test for things like .git/.hg without firingd
        # up a separate process
        test -d "$1" && return 0;
 
