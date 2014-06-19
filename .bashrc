@@ -1,3 +1,8 @@
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+  . /etc/bashrc
+fi
+
 #  ---------------------------------------------------------------------------
 #
 #  Description:  This file holds all my BASH configurations and aliases
@@ -103,7 +108,9 @@
 
     #   Set Default Editor (change 'Sublime Text' to the editor of your choice)
     #   ------------------------------------------------------------
-        export EDITOR=/usr/bin/vi
+        #export EDITOR=/usr/bin/vi
+        export EDITOR='subl -w'
+
         
         # opens file or folder with sublime
         alias sublime='open -a "Sublime Text"'
