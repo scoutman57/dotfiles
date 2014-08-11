@@ -64,13 +64,11 @@ fi
 
     # For a command prompt display like:
     # JDoe@JDoes-MacBook-Pro Jira-1327 ~/Code/MyProject $
-    export PS1="\[\e[1;31m\]\u\[\e[0;37m\]@\[\e[1;32m\]\h\[\e[1;36m\] \`git rev-parse --abbrev-ref HEAD 2>/dev/null | sed 's/$/ /'\`\[\e[1;34m\]\w \[\e[1;35m\]\$ \[\e[0;37m\]"
+    # export PS1="\[\e[1;31m\]\u\[\e[0;37m\]@\[\e[1;32m\]\h\[\e[1;36m\] \`git rev-parse --abbrev-ref HEAD 2>/dev/null | sed 's/$/ /'\`\[\e[1;34m\]\w \[\e[1;35m\]\$ \[\e[0;37m\]"
 
     # For a command prompt display like:
-    # [JDoe@JDoes-MacBook-Pro:~/Code/MyProject (git:Jira-1327)]$
-    export PS1="[$LIGHT_CYAN\u$RED@\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN\$(vcsprompt)$NO_COLOR]$ "
-
-    export PS1="$LIGHT_CYAN\u\e[0;37m\]@\[\e[1;32m\]\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN\$(vcsprompt)$NO_COLOR]$ "
+    # JDoe@JDoes-MacBook-Pro:~/Code/MyProject (git:Jira-1327)$
+    export PS1="$LIGHT_CYAN\u\e[0;37m\]@\[\e[1;32m\]\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN\$(vcsprompt)$NO_COLOR$ "
 
     # Set the directory color to light blue (cyan)
     export LS_COLORS='di=01;36'
