@@ -70,6 +70,8 @@ fi
     # [JDoe@JDoes-MacBook-Pro:~/Code/MyProject (git:Jira-1327)]$
     export PS1="[$LIGHT_CYAN\u$RED@\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN\$(vcsprompt)$NO_COLOR]$ "
 
+    export PS1="$LIGHT_CYAN\u\e[0;37m\]@\[\e[1;32m\]\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN\$(vcsprompt)$NO_COLOR]$ "
+
     # Set the directory color to light blue (cyan)
     export LS_COLORS='di=01;36'
 
