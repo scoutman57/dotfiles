@@ -70,6 +70,9 @@ fi
     # [JDoe@JDoes-MacBook-Pro:~/Code/MyProject (git:Jira-1327)]$
     export PS1="[$LIGHT_CYAN\u$RED@\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN\$(vcsprompt)$NO_COLOR]$ "
 
+    # Set the directory color to light blue (cyan)
+    export LS_COLORS='di=01;36'
+
     #   Set architecture flags
     #export ARCHFLAGS="-arch x86_64"
 
@@ -535,4 +538,4 @@ fi
 #   or for sensitive information
 #   ---------------------------------------
 
-    source "/Users/$(whoami)/Google Drive/.private"
+    source "/Users/$(whoami)/Google Drive/.dotfiles/.private"
