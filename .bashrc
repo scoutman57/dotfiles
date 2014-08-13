@@ -45,6 +45,7 @@ fi
     RED="\[\033[0;31m\]"
     YELLOW="\[\033[0;33m\]"
     LIGHT_CYAN="\[\033[0;36m\]"
+    LIGHT_GREEN="\[\033[1;32m\]"
 
     #   ---------------------------------------
     # Set up a colorful command prompt,
@@ -69,7 +70,7 @@ fi
     # For a command prompt display like:
     # Uses vcsprompt -- will show the VCS type: git, svn
     # JDoe@JDoes-MacBook-Pro:~/Code/MyProject (git:Jira-1327)$
-    export PS1="$LIGHT_CYAN\u\e[0;37m\]@\[\e[1;32m\]\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN\$(vcsprompt)$NO_COLOR$ "
+    export PS1="$LIGHT_CYAN\u$NO_COLOR@$LIGHT_GREEN\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN\$(vcsprompt)$NO_COLOR$ "
 
     # For a command prompt display like:
     # Using git rev-parse -- only shows branch for git VCS
