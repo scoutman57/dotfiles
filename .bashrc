@@ -3,6 +3,11 @@ if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
 
+if [ -f ~/.phpbrew/bashrc ]; then
+    # add phpbrew
+    source ~/.phpbrew/bashrc
+fi
+
 #  ---------------------------------------------------------------------------
 #
 #  Description:  This file holds all my BASH configurations and aliases
@@ -47,6 +52,10 @@ fi
     LIGHT_CYAN="\[\033[0;36m\]"
     LIGHT_GREEN="\[\033[1;32m\]"
 
+    # Set the directory color to light blue (cyan)
+    export LS_COLORS='di=01;36'
+
+    # Command Prompt    
     #   ---------------------------------------
     # Set up a colorful command prompt,
     # with the current git branch and the current directory.
@@ -70,15 +79,12 @@ fi
     # For a command prompt display like:
     # Uses vcsprompt -- will show the VCS type: git, svn
     # JDoe@JDoes-MacBook-Pro:~/Code/MyProject (git:Jira-1327)$
-    export PS1="$LIGHT_CYAN\u$NO_COLOR@$LIGHT_GREEN\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN\$(vcsprompt)$NO_COLOR$ "
+    export PS1="$LIGHT_CYAN\u$NO_COLOR@$LIGHT_GREEN\h$NO_COLOR:\n$NO_COLOR[$(phpbrew_current_php_version)]\n$YELLOW\w$NO_COLOR $GREEN\$(vcsprompt)$NO_COLOR$ "
 
     # For a command prompt display like:
     # Using git rev-parse -- only shows branch for git VCS
     # JDoe@JDoes-MacBook-Pro:~/Code/MyProject (Jira-1327)$
     # export PS1="$LIGHT_CYAN\u\e[0;37m\]@\[\e[1;32m\]\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN(\`git rev-parse --abbrev-ref HEAD 2>/dev/null | sed 's/$//'\`)$NO_COLOR$ "
-
-    # Set the directory color to light blue (cyan)
-    export LS_COLORS='di=01;36'
 
     #   Set architecture flags
     #export ARCHFLAGS="-arch x86_64"
@@ -87,7 +93,7 @@ fi
     #   ------------------------------------------------------------
     # Ensure user-installed binaries take precedence
     export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
-    export PATH="$(brew --prefix homebrew/php/php55)/bin:$PATH"
+    #export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
     export PATH="/usr/local/git/bin:/sw/bin:/usr/local/bin:/usr/local:/usr/local/sbin:$PATH"
     export PATH="/Applications/PhpStorm EAP.app/Contents/MacOS:$PATH"
 
@@ -174,6 +180,7 @@ fi
     # grabs the latest .bash_profile file and reloads the prompt
     alias updatebashrc="curl https://raw.github.com/w2pc/dotfiles/master/.bashrc > ~/.bashrc && reload"
     
+    # Directoy navigation aliases
     alias ls='ls --color=auto'                  # Preferred 'ls' implementation
     alias dir='dir --color=auto'                # Preferred 'dir' implementation
     alias vdir='vdir --color=auto'              # Preferred 'vdir' implementation
@@ -221,6 +228,7 @@ fi
     #   ------------------------------------------------------------
     showa () { /usr/bin/grep --color=always -i -a1 $@ ~/Library/init/bash/aliases.bash | grep -v '^\s*$' | less -FSRXc ; }
 
+    #SSH Key Generation
     function sshKeyGen(){
         echo "What's the name of the Key (no spaced please) ? ";
         read name;
@@ -238,7 +246,6 @@ fi
 #   -------------------------------
 #   3.  FILE AND FOLDER MANAGEMENT
 #   -------------------------------
-
     zipf () { zip -r "$1".zip "$1" ; }          # zipf:         To create a ZIP archive of a folder
     #alias numFiles='echo $(ls -1 | wc -l)'      # numFiles:     Count of non-hidden files in current dir
     #alias make1mb='mkfile 1m ./1MB.dat'         # make1mb:      Creates a file of 1mb size (all zeros)
@@ -248,20 +255,17 @@ fi
     #   cdf:  'Cd's to frontmost window of MacOS Finder
     #   ------------------------------------------------------
     cdf () {
-        currFolderPath=$( /usr/bin/osascript <<"    EOT"
-            tell application "Finder"
-                try
-            set currFolder to (folder of the front window as alias)
-                on error
-            set currFolder to (path to desktop folder as alias)
-                end try
-                POSIX path of currFolder
-            end tell
-        EOT
-        )
-        echo "cd to \"$currFolderPath\""
-        cd "$currFolderPath"
+        target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
+            if [ "$target" != "" ]; then
+                echo "cd to \"$currFolderPath\""
+                cd "$target"; pwd
+            else
+                echo 'No Finder window found' >&2
+            fi
     }
+
+    # Open finder at the current location
+    alias finder='open -a Finder ./'
 
     #   extract:  Extract most know archives with one command
     #   ---------------------------------------------------------
@@ -515,18 +519,6 @@ fi
         echo "git commit -m '$message'"
         git commit -m "$message"
     }
-    
-    # git push pub <current-branch>
-    gpp()
-    {
-        branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-        if test -z "$branch" ; then
-            echo "You are not inside of a git repository, or HEAD is detached." 1>&2
-            return 1
-        fi
-        echo "git push pub $branch"
-        git push pub "$branch"
-    }
 
     # git push <current-branch>
     gp()
@@ -536,7 +528,7 @@ fi
             echo "You are not inside of a git repository, or HEAD is detached." 1>&2
             return 1
         fi
-        echo "git push s$branch"
+        echo "git push $branch"
         git push "$branch"
     }
 
