@@ -497,7 +497,7 @@ fi
     alias gaa='git add .'
     alias gaaa='git add -A'
     alias gb='git branch'
-    alias gbd='git branch -d '
+    alias gbd='git branch -d'
     alias gc='git commit'
     alias gcm='git commit -m'
     alias gco='git checkout'
@@ -518,13 +518,18 @@ fi
     alias gstl='git stash list'
     alias gstp='git stash pop'
     alias gstd='git stash drop'
-    
 
     # ----------------------
     # Git Functions
     # ----------------------
     # Git log find by commit message
     function glf() { git log --all --grep="$1"; }
+
+    # delete the remote branch
+    gbdr()
+    {
+        git push origin :"$1"
+    }
 
     # git commit, and prefix/prepend the current branch name to the message.
     gcb()
