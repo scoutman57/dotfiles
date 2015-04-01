@@ -532,7 +532,7 @@ fi
     }
 
     # git commit, and prefix/prepend the current branch name to the message.
-    gcb()
+    gcmb()
     {
         if test "$#" -ne 1 ; then
             echo "Usage: gcm 'commit message...'" 1>&2
