@@ -4,9 +4,9 @@ if [ -f /etc/bashrc ]; then
 fi
 
 if [ -f ~/.phpbrew/bashrc ]; then
-    # add phpbrew
-    source ~/.phpbrew/bashrc
-fi
+    .  ~/.phpbrew/bashrc
+fi    
+
 
 #  ---------------------------------------------------------------------------
 #
@@ -93,7 +93,7 @@ fi
     #   ------------------------------------------------------------
     # Ensure user-installed binaries take precedence
     export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
-    #export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
+    export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
     export PATH="/usr/local/git/bin:/sw/bin:/usr/local/bin:/usr/local:/usr/local/sbin:$PATH"
     export PATH="/Applications/PhpStorm EAP.app/Contents/MacOS:$PATH"
 
@@ -216,6 +216,40 @@ fi
     #   lr:  Full Recursive Directory Listing
     #   ------------------------------------------
     alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\'' -e '\''s/^/   /'\'' -e '\''s/-/|/'\'' | less'
+
+    # ----------------------
+    # Git Aliases
+    # ----------------------
+    alias ga='git add'
+    alias gaa='git add .'
+    alias gaaa='git add -A'
+    alias gb='git branch'
+    alias gbd='git branch -d '
+    alias gc='git commit'
+    alias gcm='git commit -m'
+    alias gco='git checkout'
+    alias gcob='git checkout -b'
+    alias gcom='git checkout master'
+    alias gd='git diff'
+    alias gda='git diff HEAD'
+    alias gi='git init'
+    alias gl='git log'
+    alias glg='git log --graph --oneline --decorate --all'
+    alias gld='git log --pretty=format:"%h %ad %s" --date=short --all'
+    alias gm='git merge --no-ff'
+    alias gp='git pull'
+    alias gs='echo ""; echo "*********************************************"; echo -e "   DO NOT FORGET TO PULL BEFORE COMMITTING"; echo "*********************************************"; echo ""; git status'
+    alias gss='git status -s'
+    alias gst='git stash'
+    alias gstl='git stash list'
+    alias gstp='git stash pop'
+    alias gstd='git stash drop'
+
+    # ----------------------
+    # Git Functions
+    # ----------------------
+    # Git log find by commit message
+    function glf() { git log --all --grep="$1"; }
 
     #   mans:   Search manpage given in agument '1' for term given in argument '2' (case insensitive)
     #           displays paginated result with colored search terms and two lines surrounding each hit.             Example: mans mplayer codec
@@ -520,7 +554,7 @@ fi
         git commit -m "$message"
     }
 
-    # git push <current-branch>
+    # git push <current-branch>d
     gp()
     {
         branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
@@ -528,7 +562,7 @@ fi
             echo "You are not inside of a git repository, or HEAD is detached." 1>&2
             return 1
         fi
-        echo "git push $branch"
+        echo "git push origin $branch"
         git push "$branch"
     }
 
