@@ -562,7 +562,7 @@ fi
             return 1
         fi
         echo "git push origin $branch"
-        git push "$branch"
+        git push origin "$branch"
     }
 
 #   ---------------------------------------
