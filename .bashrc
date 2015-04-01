@@ -217,40 +217,6 @@ fi
     #   ------------------------------------------
     alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\'' -e '\''s/^/   /'\'' -e '\''s/-/|/'\'' | less'
 
-    # ----------------------
-    # Git Aliases
-    # ----------------------
-    alias ga='git add'
-    alias gaa='git add .'
-    alias gaaa='git add -A'
-    alias gb='git branch'
-    alias gbd='git branch -d '
-    alias gc='git commit'
-    alias gcm='git commit -m'
-    alias gco='git checkout'
-    alias gcob='git checkout -b'
-    alias gcom='git checkout master'
-    alias gd='git diff'
-    alias gda='git diff HEAD'
-    alias gi='git init'
-    alias gl='git log'
-    alias glg='git log --graph --oneline --decorate --all'
-    alias gld='git log --pretty=format:"%h %ad %s" --date=short --all'
-    alias gm='git merge --no-ff'
-    alias gp='git pull'
-    alias gs='echo ""; echo "*********************************************"; echo -e "   DO NOT FORGET TO PULL BEFORE COMMITTING"; echo "*********************************************"; echo ""; git status'
-    alias gss='git status -s'
-    alias gst='git stash'
-    alias gstl='git stash list'
-    alias gstp='git stash pop'
-    alias gstd='git stash drop'
-
-    # ----------------------
-    # Git Functions
-    # ----------------------
-    # Git log find by commit message
-    function glf() { git log --all --grep="$1"; }
-
     #   mans:   Search manpage given in agument '1' for term given in argument '2' (case insensitive)
     #           displays paginated result with colored search terms and two lines surrounding each hit.             Example: mans mplayer codec
     #   --------------------------------------------------------------------
@@ -485,11 +451,6 @@ fi
     # curl https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
     source ~/.git-prompt.sh
 
-        # Git - compact, colorized git log
-    alias gl="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-    # Git - Visualize git log
-    alias lg='git log --graph --full-history --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s"'
-
     # Lets figure out what out what type of source control we are using.
     __has_parent_dir () {
        # Utility function so we can test for things like .git/.hg without firingd
@@ -529,11 +490,44 @@ fi
         vcsgetbranch 2>/dev/null | sed 's/^/\(/;s/$/\) /'
     }
 
+    # ----------------------
+    # Git Aliases
+    # ----------------------
+    alias ga='git add'
+    alias gaa='git add .'
+    alias gaaa='git add -A'
+    alias gb='git branch'
+    alias gbd='git branch -d '
+    alias gc='git commit'
+    alias gcm='git commit -m'
+    alias gco='git checkout'
+    alias gcob='git checkout -b'
+    alias gcom='git checkout master'
+    alias gd='git diff'
+    alias gda='git diff HEAD'
+    alias gi='git init'
+    # Git - compact, colorized git log
+    alias gl="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr %ad) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short --all"
+    # Git - Visualize git log
+    alias glg='git log --graph --full-history --oneline --decorate --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s"'
+    alias gm='git merge --no-ff'
+    alias gpl='git pull'
+    alias gs='echo ""; echo "*********************************************"; echo -e "   DO NOT FORGET TO PULL BEFORE COMMITTING"; echo "*********************************************"; echo ""; git status'
+    alias gss='git status -s'
+    alias gst='git stash'
+    alias gstl='git stash list'
+    alias gstp='git stash pop'
+    alias gstd='git stash drop'
+    
 
-    #   GIT Functions
-    #   ---------------------------------------
+    # ----------------------
+    # Git Functions
+    # ----------------------
+    # Git log find by commit message
+    function glf() { git log --all --grep="$1"; }
+
     # git commit, and prefix/prepend the current branch name to the message.
-    gcm()
+    gcb()
     {
         if test "$#" -ne 1 ; then
             echo "Usage: gcm 'commit message...'" 1>&2
@@ -554,7 +548,7 @@ fi
         git commit -m "$message"
     }
 
-    # git push <current-branch>d
+    # git push <current-branch>
     gp()
     {
         branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
