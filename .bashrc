@@ -226,7 +226,7 @@ fi
 
     #   showa: to remind yourself of an alias (given some part of it)
     #   ------------------------------------------------------------
-    showa () { /usr/bin/grep --color=always -i -a1 $@ ~/Library/init/bash/aliases.bash | grep -v '^\s*$' | less -FSRXc ; }
+    showa () { /usr/bin/grep --color=always -i -a1 $@ ~/.bashrc | grep -v '^\s*$' | less -FSRXc ; }
 
     #SSH Key Generation
     function sshKeyGen(){
@@ -240,6 +240,19 @@ fi
         pbcopy < ~/.ssh/id_rsa_$name.pub;
 
         echo "SSH Public Key copied to your clipboard";
+    }
+
+    # The skip command will just add some blank lines. I find this helpful when I have a lot of output from a command, and want to get some visual separation so I can easily spot my last command
+    function skip(){
+        NUMBEROFTIMES=5
+        if [[ $1 ]]; then
+            let NUMBEROFTIMES=$NUMBEROFTIMES*$1
+        fi
+
+        for (( i=1; i <= $NUMBEROFTIMES; i++ ))
+        do
+            printf "\n"
+        done
     }
 
 
