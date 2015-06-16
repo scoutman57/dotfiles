@@ -92,6 +92,7 @@ fi
     #   Set Paths
     #   ------------------------------------------------------------
     # Ensure user-installed binaries take precedence
+    export PATH="~/.composer/vendor/bin:$PATH"
     export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
     export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
     export PATH="/usr/local/git/bin:/sw/bin:/usr/local/bin:/usr/local:/usr/local/sbin:$PATH"
@@ -212,6 +213,9 @@ fi
     trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
     ql () { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in MacOS Quicklook Preview
     alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
+
+    # moveing to code directories
+    alias code='cd ~/Code'
 
     #   lr:  Full Recursive Directory Listing
     #   ------------------------------------------
@@ -369,6 +373,8 @@ fi
     alias ipInfo1='ipconfig getpacket en1'              # ipInfo1:      Get info on connections for en1
     alias openPorts='sudo lsof -i | grep LISTEN'        # openPorts:    All listening connections
     alias showBlocked='sudo ipfw list'                  # showBlocked:  All ipfw rules inc/ blocked IPs
+    portInfo() { sudo lsof -i :$1 ;}
+    alias portInfo=portInfo                             # checkPort     Get info on connections on port
 
     #   ii:  display useful host related informaton
     #   -------------------------------------------------------------------
