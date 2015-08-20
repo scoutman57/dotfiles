@@ -5,7 +5,7 @@ fi
 
 if [ -f ~/.phpbrew/bashrc ]; then
     .  ~/.phpbrew/bashrc
-fi    
+fi
 
 
 #  ---------------------------------------------------------------------------
@@ -27,7 +27,7 @@ fi
 #  8.   Web Development
 #  9.   Reminders & Notes
 #  10.  Version Control System
-#  
+#
 #
 #  ---------------------------------------------------------------------------
 
@@ -55,18 +55,18 @@ fi
     # Set the directory color to light blue (cyan)
     export LS_COLORS='di=01;36'
 
-    # Command Prompt    
+    # Command Prompt
     #   ---------------------------------------
     # Set up a colorful command prompt,
     # with the current git branch and the current directory.
     #   ---------------------------------------
     # export PS1="________________________________________________________________________________\n| \w @ \h (\u) \n| => "
     # export PS2="| => "
-    
+
     # For a command prompt display like:
     # JDoe@JDoes-MacBook-Pro (git:Jira-1327) ~/Code/MyProject $
     #export PS1="\[\e[1;31m\]\u\[\e[0;37m\]@\[\e[1;32m\]\h\[\e[1;36m\] $(__vcs_name) \[\e[1;34m\]\w \[\e[1;35m\]\$ \[\e[0;37m\]"
-    
+
     # For a command prompt display like:
     # JDoe@JDoes-MacBook-Pro[~/Code/MyProject](git:Jira-1327)
     # $
@@ -79,7 +79,7 @@ fi
     # For a command prompt display like:
     # Uses vcsprompt -- will show the VCS type: git, svn
     # JDoe@JDoes-MacBook-Pro:~/Code/MyProject (git:Jira-1327)$
-    export PS1="$LIGHT_CYAN\u$NO_COLOR@$LIGHT_GREEN\h$NO_COLOR:\n$NO_COLOR[$(phpbrew_current_php_version)]\n$YELLOW\w$NO_COLOR $GREEN\$(vcsprompt)$NO_COLOR$ "
+    export PS1="$LIGHT_CYAN\u$NO_COLOR@$LIGHT_GREEN\h$NO_COLOR:\n$YELLOW\w$NO_COLOR $GREEN\$(vcsprompt)$NO_COLOR$ "
 
     # For a command prompt display like:
     # Using git rev-parse -- only shows branch for git VCS
@@ -94,14 +94,15 @@ fi
     # Ensure user-installed binaries take precedence
     export PATH="~/.composer/vendor/bin:$PATH"
     export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
-    export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
-    export PATH="/usr/local/git/bin:/sw/bin:/usr/local/bin:/usr/local:/usr/local/sbin:$PATH"
+    #export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
+    export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
+    export PATH="/usr/local/bin:/usr/local:/usr/local/sbin:$PATH"
     export PATH="/Applications/PhpStorm EAP.app/Contents/MacOS:$PATH"
 
     #set ruby manager from homebrew
-    export RBENV_ROOT=/usr/local/var/rbenv
-    eval "$(rbenv init -)"
-    if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+    #export RBENV_ROOT=/usr/local/var/rbenv
+    #eval "$(rbenv init -)"
+    #if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
     # Conditionally add some things to $PATH, if they exist.
     for d in ~/bin ~/usr/bin ; do
@@ -126,16 +127,18 @@ fi
     #   Set Default Editor (change 'Sublime Text' to the editor of your choice)
     #   ------------------------------------------------------------
         #export EDITOR=/usr/bin/vi
-        export EDITOR='subl -w'
+        export EDITOR='atom -w'
 
-        
+
         # opens file or folder with sublime
         alias sublime='open -a "Sublime Text"'
+        # opens file or folder with atom.io
+        alias atom='open -a "Atom"'
 
     #   Set Default Diff (change 'phpstorm' to the editor of your choice)
-    #   ------------------------------------------------------------       
+    #   ------------------------------------------------------------
         # opens file or folder with the default diff tool
-        # diff <path to file1> <path to file2> 
+        # diff <path to file1> <path to file2>
         diff()
         {
             phpstorm diff $(realpath "$1") $(realpath "$2")
@@ -143,7 +146,7 @@ fi
         }
 
     #   Set Default Merge (change 'phpstorm' to the editor of your choice)
-    #   ------------------------------------------------------------       
+    #   ------------------------------------------------------------
         # opens file with the default merge tool
         # merge <path to file1> <path to file2> <path to file3> <path to output>
         # file3 is the base revision for file1 and file2, file4 (output) is the file to save the merge results in (optional)
@@ -151,7 +154,7 @@ fi
         {
             phpstorm merge $(realpath "$1") $(realpath "$2") $(realpath "$3") $(realpath "$4")
             echo "Merge: $(realpath $1) $(realpath $2) $(realpath $3) $(realpath $4)"
-        }     
+        }
 
     #   Set default blocksize for ls, df, du
     #   from this: http://hints.macworld.com/comment.php?mode=view&cid=24491
@@ -180,9 +183,9 @@ fi
 
     # grabs the latest .bash_profile file and reloads the prompt
     alias updatebashrc="curl https://raw.github.com/w2pc/dotfiles/master/.bashrc > ~/.bashrc && reload"
-    
+
     # Directoy navigation aliases
-    alias ls='ls --color=auto'                  # Preferred 'ls' implementation
+    alias ls='ls -G'                  # Preferred 'ls' implementation
     alias dir='dir --color=auto'                # Preferred 'dir' implementation
     alias vdir='vdir --color=auto'              # Preferred 'vdir' implementation
     alias grep='grep --color=auto'              # Preferred 'grep' implementation
@@ -200,7 +203,7 @@ fi
     alias .4='cd ../../../../'                  # Go back 4 directory levels
     alias .5='cd ../../../../../'               # Go back 5 directory levels
     alias .6='cd ../../../../../../'            # Go back 6 directory levels
-    alias edit='sublime'                           # edit:         Opens any file in sublime editor
+    alias edit='atom'                           # edit:         Opens any file in atom editor
     alias f='open -a Finder ./'                 # f:            Opens current directory in MacOS Finder
     alias ~="cd ~"                              # ~:            Go Home
     alias c='clear'                             # c:            Clear terminal display
@@ -431,7 +434,7 @@ fi
     httpDebug () { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
 
     # Starts a php server
-    phpServer () { php -S localhost:$1;}
+    phps () { php -S localhost:$1;}
 #   ---------------------------------------
 #   9.  REMINDERS & NOTES
 #   ---------------------------------------
