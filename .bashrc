@@ -124,6 +124,10 @@ fi
         . $(brew --prefix)/etc/bash_completion
     fi
 
+    #   Set ngrok VPN (Secure tunnels to localhost)
+    #   ------------------------------------------------------------
+        alias ngrok='/Applications/ngrok'
+
     #   Set Default Editor (change 'Sublime Text' to the editor of your choice)
     #   ------------------------------------------------------------
         #export EDITOR=/usr/bin/vi
