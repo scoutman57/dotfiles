@@ -3,10 +3,10 @@ if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
 
-if [ -f ~/.phpbrew/bashrc ]; then
-    .  ~/.phpbrew/bashrc
+# Configure keyboard.
+if test -f ~/.inputrc ; then
+    bind -f ~/.inputrc
 fi
-
 
 #  ---------------------------------------------------------------------------
 #
@@ -45,7 +45,8 @@ fi
     # Set Colors
     bold=$(tput -Txterm bold)
     reset=$(tput -Txterm sgr0)
-    NO_COLOR="\[\033[00m\]"
+    NO_COLOR="\[\033[00m\]" #black
+    NO_COLOR="\[\e[0;37m\]"
     GREEN="\[\033[0;32m\]"
     RED="\[\033[0;31m\]"
     YELLOW="\[\033[0;33m\]"
@@ -80,6 +81,7 @@ fi
     # Uses vcsprompt -- will show the VCS type: git, svn
     # JDoe@JDoes-MacBook-Pro:~/Code/MyProject (git:Jira-1327)$
     export PS1="$LIGHT_CYAN\u$NO_COLOR@$LIGHT_GREEN\h$NO_COLOR:\n$YELLOW\w$NO_COLOR $GREEN\$(vcsprompt)$NO_COLOR$ "
+    #export PS1="\u@\h:\w\$ ${reset}"
 
     # For a command prompt display like:
     # Using git rev-parse -- only shows branch for git VCS
@@ -92,11 +94,14 @@ fi
     #   Set Paths
     #   ------------------------------------------------------------
     # Ensure user-installed binaries take precedence
+    export GEM_HOME=$HOME/.gem
+    export PATH=$GEM_HOME/bin:$PATH
+
     export PATH="~/.composer/vendor/bin:$PATH"
+    export PATH="/usr/local/sbin:$PATH"
     export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
-    #export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
-    export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
-    export PATH="/usr/local/bin:/usr/local:/usr/local/sbin:$PATH"
+    export PATH="$(brew --prefix homebrew/php/php70)/bin:$PATH"
+    export PATH="/usr/local:$PATH"
     export PATH="/Applications/PhpStorm EAP.app/Contents/MacOS:$PATH"
 
     #set ruby manager from homebrew
@@ -131,7 +136,7 @@ fi
     #   Set Default Editor (change 'Sublime Text' to the editor of your choice)
     #   ------------------------------------------------------------
         #export EDITOR=/usr/bin/vi
-        export EDITOR='atom -w'
+        #export EDITOR='atom -w'
 
 
         # opens file or folder with sublime
@@ -524,7 +529,10 @@ fi
     alias gaa='git add .'
     alias gaaa='git add -A'
     alias gb='git branch'
+    # Git - delete a local branch
     alias gbd='git branch -d'
+    # Git - delete a remote branch
+    alias gbdr='git push origin --delete'
     alias gc='git commit'
     alias gcm='git commit -m'
     alias gco='git checkout'
@@ -553,10 +561,7 @@ fi
     function glf() { git log --all --grep="$1"; }
 
     # delete the remote branch
-    gbdr()
-    {
-        git push origin :"$1"
-    }
+    #function gbdr() { git push origin --delete "$1"; }
 
     # git commit, and prefix/prepend the current branch name to the message.
     gcmb()
