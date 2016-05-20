@@ -203,7 +203,7 @@ fi
     alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
     alias ll='ls -FGlAhp'                       # Preferred 'ls' implementation
     alias less='less -FSRXc'                    # Preferred 'less' implementation
-    cd() { builtin cd "$@"; ls; }               # Always list directory contents upon 'cd'
+    cd() { builtin cd "$@"; ls ; }               # Always list directory contents upon 'cd'
     alias cd..='cd ../'                         # Go back 1 directory level (for fast typers)
     alias ..='cd ../'                           # Go back 1 directory level
     alias ...='cd ../../'                       # Go back 2 directory levels
@@ -220,9 +220,9 @@ fi
     alias show_options='shopt'                  # Show_options: display bash options settings
     alias fix_stty='stty sane'                  # fix_stty:     Restore terminal settings when screwed up
     alias cic='set completion-ignore-case On'   # cic:          Make tab-completion case-insensitive
-    mcd() { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
-    trash() { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
-    ql() { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in MacOS Quicklook Preview
+    mcd() { mkdir -p "$1" && cd "$1" ; }        # mcd:          Makes new Dir and jumps inside
+    trash() { command mv "$@" ~/.Trash  ; }     # trash:        Moves a file to the MacOS trash
+    ql() { qlmanage -p "$*" >& /dev/null ; }    # ql:           Opens any file in MacOS Quicklook Preview
     alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
 
     #   lr:  Full Recursive Directory Listing
@@ -232,11 +232,11 @@ fi
     #   mans:   Search manpage given in agument '1' for term given in argument '2' (case insensitive)
     #           displays paginated result with colored search terms and two lines surrounding each hit.             Example: mans mplayer codec
     #   --------------------------------------------------------------------
-    mans() { man $1 | grep -iC2 --color=always $2 | less; }
+    mans() { man $1 | grep -iC2 --color=always $2 | less ; }
 
     #   showa: to remind yourself of an alias (given some part of it)
     #   ------------------------------------------------------------
-    showa() { /usr/bin/grep --color=always -i -a1 $@ ~/.bashrc | grep -v '^\s*$' | less -FSRXc; }
+    showa() { /usr/bin/grep --color=always -i -a1 $@ ~/.bashrc | grep -v '^\s*$' | less -FSRXc ; }
 
     #SSH Key Generation
     sshKeyGen()
@@ -253,7 +253,7 @@ fi
         echo "SSH Public Key copied to your clipboard";
     }
 
-    ssh-copy-id() { cat ~/.ssh/id_rsa.pub | ssh $1 "mkdir ~/.ssh; cat >> ~/.ssh/authorized_keys"; }
+    ssh-copy-id() { cat ~/.ssh/id_rsa.pub | ssh $1 "mkdir ~/.ssh; cat >> ~/.ssh/authorized_keys" ; }
 
     # The skip command will just add some blank lines. I find this helpful when I have a lot of output from a command, and want to get some visual separation so I can easily spot my last command
     skip()
@@ -273,7 +273,7 @@ fi
 #   -------------------------------
 #   3.  FILE AND FOLDER MANAGEMENT
 #   -------------------------------
-    zipf() { zip -r "$1".zip "$1"; }          # zipf:         To create a ZIP archive of a folder
+    zipf() { zip -r "$1".zip "$1" ; }          # zipf:         To create a ZIP archive of a folder
     #alias numFiles='echo $(ls -1 | wc -l)'      # numFiles:     Count of non-hidden files in current dir
     #alias make1mb='mkfile 1m ./1MB.dat'         # make1mb:      Creates a file of 1mb size (all zeros)
     #alias make5mb='mkfile 5m ./5MB.dat'         # make5mb:      Creates a file of 5mb size (all zeros)
@@ -325,13 +325,13 @@ fi
 #   ---------------------------
 
     alias qfind="find . -name "                 # qfind:    Quickly search for file
-    ff() { /usr/bin/find . -name "$@"; }      # ff:       Find file under the current directory
-    ffs() { /usr/bin/find . -name "$@"'*'; }  # ffs:      Find file whose name starts with a given string
-    ffe() { /usr/bin/find . -name '*'"$@"; }  # ffe:      Find file whose name ends with a given string
+    ff() { /usr/bin/find . -name "$@" ; }      # ff:       Find file under the current directory
+    ffs() { /usr/bin/find . -name "$@"'*' ; }  # ffs:      Find file whose name starts with a given string
+    ffe() { /usr/bin/find . -name '*'"$@" ; }  # ffe:      Find file whose name ends with a given string
 
     #   spotlight: Search for a file using MacOS Spotlight's metadata
     #   -----------------------------------------------------------
-    spotlight() { mdfind "kMDItemDisplayName == '$@'wc"; }
+    spotlight() { mdfind "kMDItemDisplayName == '$@'wc" ; }
 
 
 #   ---------------------------
@@ -344,7 +344,7 @@ fi
     #       E.g. findPid '/d$/' finds pids of all processes with names ending in 'd'
     #       Without the 'sudo' it will only find processes of the current user
     #   -----------------------------------------------------
-    findPid() { lsof -t -c "$@"; }
+    findPid() { lsof -t -c "$@" ; }
 
     #   memHogsTop, memHogsPs:  Find memory hogs
     #   -----------------------------------------------------
@@ -368,7 +368,7 @@ fi
 
     #   my_ps: List processes owned by my user:
     #   ------------------------------------------------------------
-    my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,start,time,bsdtime,command; }
+    my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,start,time,bsdtime,command ; }
 
 
 #   ---------------------------
@@ -385,7 +385,7 @@ fi
     alias ipInfo1='ipconfig getpacket en1'              # ipInfo1:      Get info on connections for en1
     alias openPorts='sudo lsof -i | grep LISTEN'        # openPorts:    All listening connections
     alias showBlocked='sudo ipfw list'                  # showBlocked:  All ipfw rules inc/ blocked IPs
-    portInfo() { sudo lsof -i :$1; }
+    portInfo() { sudo lsof -i :$1 ; }
     alias portInfo=portInfo                             # checkPort     Get info on connections on port
 
     #   ii:  display useful host related informaton
@@ -437,14 +437,14 @@ fi
     alias editHosts='sudo edit /etc/hosts'                  # editHosts:        Edit /etc/hosts file
     alias tailLogs='tail /var/log/httpd/error_log'              # herr:             Tails HTTP error logs
     alias apacheLogs="less +F /var/log/apache2/error_log"   # Apachelogs:   Shows apache error logs
-    httpHeaders() { /usr/bin/curl -I -L $@; }             # httpHeaders:      Grabs headers from web page
+    httpHeaders() { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grabs headers from web page
 
     #   httpDebug:  Download a web page and show info on what took time
     #   -------------------------------------------------------------------
-    httpDebug() { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n"; }
+    httpDebug() { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
 
     # Starts a php server
-    phps() { php -S localhost:$1; }
+    phps() { php -S localhost:$1 ; }
 #   ---------------------------------------
 #   9.  REMINDERS & NOTES
 #   ---------------------------------------
@@ -520,7 +520,7 @@ fi
         svn info | sed '/^Repository Root: /s/^.*: //' | sed 's/^/svn:/'
     }
 
-    vcsprompt() { vcsgetbranch 2>/dev/null | sed 's/^/\(/;s/$/\) /'; }
+    vcsprompt() { vcsgetbranch 2>/dev/null | sed 's/^/\(/;s/$/\) /' ; }
 
     # ----------------------
     # Git Aliases
@@ -558,10 +558,10 @@ fi
     # Git Functions
     # ----------------------
     # Git log find by commit message
-    glf() { git log --all --grep="$1"; }
+    glf() { git log --all --grep="$1" ; }
 
     # delete the remote branch
-    #gbdr() { git push origin --delete "$1"; }
+    #gbdr() { git push origin --delete "$1" ; }
 
     # git commit, and prefix/prepend the current branch name to the message.
     gcmb()
