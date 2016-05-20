@@ -28,7 +28,6 @@ fi
 #  9.   Reminders & Notes
 #  10.  Version Control System
 #
-#
 #  ---------------------------------------------------------------------------
 
 #   -------------------------------
@@ -148,7 +147,7 @@ fi
     #   ------------------------------------------------------------
         # opens file or folder with the default diff tool
         # diff <path to file1> <path to file2>
-        diff()
+        psdiff()
         {
             phpstorm diff $(realpath "$1") $(realpath "$2")
             echo "Diff: $(realpath $1) $(realpath $2) $(realpath $3) $(realpath $4)"
@@ -221,9 +220,9 @@ fi
     alias show_options='shopt'                  # Show_options: display bash options settings
     alias fix_stty='stty sane'                  # fix_stty:     Restore terminal settings when screwed up
     alias cic='set completion-ignore-case On'   # cic:          Make tab-completion case-insensitive
-    mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
+    mcd() { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
     trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
-    ql () { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in MacOS Quicklook Preview
+    ql() { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in MacOS Quicklook Preview
     alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
 
     #   lr:  Full Recursive Directory Listing
@@ -233,16 +232,15 @@ fi
     #   mans:   Search manpage given in agument '1' for term given in argument '2' (case insensitive)
     #           displays paginated result with colored search terms and two lines surrounding each hit.             Example: mans mplayer codec
     #   --------------------------------------------------------------------
-    mans () {
-        man $1 | grep -iC2 --color=always $2 | less
-    }
+    mans() { man $1 | grep -iC2 --color=always $2 | less }
 
     #   showa: to remind yourself of an alias (given some part of it)
     #   ------------------------------------------------------------
-    showa () { /usr/bin/grep --color=always -i -a1 $@ ~/.bashrc | grep -v '^\s*$' | less -FSRXc ; }
+    showa() { /usr/bin/grep --color=always -i -a1 $@ ~/.bashrc | grep -v '^\s*$' | less -FSRXc ; }
 
     #SSH Key Generation
-    function sshKeyGen(){
+    sshKeyGen()
+    {
         echo "What's the name of the Key (no spaced please) ? ";
         read name;
 
@@ -255,8 +253,11 @@ fi
         echo "SSH Public Key copied to your clipboard";
     }
 
+    ssh-copy-id() { cat ~/.ssh/id_rsa.pub | ssh $1 "mkdir ~/.ssh; cat >> ~/.ssh/authorized_keys" }
+
     # The skip command will just add some blank lines. I find this helpful when I have a lot of output from a command, and want to get some visual separation so I can easily spot my last command
-    function skip(){
+    skip()
+    {
         NUMBEROFTIMES=5
         if [[ $1 ]]; then
             let NUMBEROFTIMES=$NUMBEROFTIMES*$1
@@ -272,7 +273,7 @@ fi
 #   -------------------------------
 #   3.  FILE AND FOLDER MANAGEMENT
 #   -------------------------------
-    zipf () { zip -r "$1".zip "$1" ; }          # zipf:         To create a ZIP archive of a folder
+    zipf() { zip -r "$1".zip "$1" ; }          # zipf:         To create a ZIP archive of a folder
     #alias numFiles='echo $(ls -1 | wc -l)'      # numFiles:     Count of non-hidden files in current dir
     #alias make1mb='mkfile 1m ./1MB.dat'         # make1mb:      Creates a file of 1mb size (all zeros)
     #alias make5mb='mkfile 5m ./5MB.dat'         # make5mb:      Creates a file of 5mb size (all zeros)
@@ -280,7 +281,8 @@ fi
 
     #   cdf:  'Cd's to frontmost window of MacOS Finder
     #   ------------------------------------------------------
-    cdf () {
+    cdf()
+    {
         target=`osascript -e 'tell application "Finder" to if (count of Finder windows) > 0 then get POSIX path of (target of front Finder window as text)'`
             if [ "$target" != "" ]; then
                 echo "cd to \"$currFolderPath\""
@@ -295,7 +297,8 @@ fi
 
     #   extract:  Extract most know archives with one command
     #   ---------------------------------------------------------
-    extract () {
+    extract()
+    {
         if [ -f $1 ] ; then
           case $1 in
             *.tar.bz2)   tar xjf $1     ;;
@@ -322,14 +325,13 @@ fi
 #   ---------------------------
 
     alias qfind="find . -name "                 # qfind:    Quickly search for file
-    ff () { /usr/bin/find . -name "$@" ; }      # ff:       Find file under the current directory
-    ffs () { /usr/bin/find . -name "$@"'*' ; }  # ffs:      Find file whose name starts with a given string
-    ffe () { /usr/bin/find . -name '*'"$@" ; }  # ffe:      Find file whose name ends with a given string
+    ff() { /usr/bin/find . -name "$@" ; }      # ff:       Find file under the current directory
+    ffs() { /usr/bin/find . -name "$@"'*' ; }  # ffs:      Find file whose name starts with a given string
+    ffe() { /usr/bin/find . -name '*'"$@" ; }  # ffe:      Find file whose name ends with a given string
 
     #   spotlight: Search for a file using MacOS Spotlight's metadata
     #   -----------------------------------------------------------
-    spotlight () { mdfind "kMDItemDisplayName == '$@'wc"; }
-
+    spotlight() { mdfind "kMDItemDisplayName == '$@'wc"; }
 
 #   ---------------------------
 #   5.  PROCESS MANAGEMENT
@@ -341,7 +343,7 @@ fi
     #       E.g. findPid '/d$/' finds pids of all processes with names ending in 'd'
     #       Without the 'sudo' it will only find processes of the current user
     #   -----------------------------------------------------
-    findPid () { lsof -t -c "$@" ; }
+    findPid() { lsof -t -c "$@" ; }
 
     #   memHogsTop, memHogsPs:  Find memory hogs
     #   -----------------------------------------------------
@@ -387,7 +389,8 @@ fi
 
     #   ii:  display useful host related informaton
     #   -------------------------------------------------------------------
-    ii() {
+    ii()
+    {
         echo -e "\nYou are logged on ${RED}$HOST"
         echo -e "\nAdditionnal information:$NC " ; uname -a
         echo -e "\n${RED}Users logged on:$NC " ; w -h
@@ -433,14 +436,14 @@ fi
     alias editHosts='sudo edit /etc/hosts'                  # editHosts:        Edit /etc/hosts file
     alias tailLogs='tail /var/log/httpd/error_log'              # herr:             Tails HTTP error logs
     alias apacheLogs="less +F /var/log/apache2/error_log"   # Apachelogs:   Shows apache error logs
-    httpHeaders () { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grabs headers from web page
+    httpHeaders() { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grabs headers from web page
 
     #   httpDebug:  Download a web page and show info on what took time
     #   -------------------------------------------------------------------
-    httpDebug () { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
+    httpDebug() { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
 
     # Starts a php server
-    phps () { php -S localhost:$1;}
+    phps() { php -S localhost:$1;}
 #   ---------------------------------------
 #   9.  REMINDERS & NOTES
 #   ---------------------------------------
@@ -481,7 +484,8 @@ fi
     source ~/.git-prompt.sh
 
     # Lets figure out what out what type of source control we are using.
-    __has_parent_dir () {
+    __has_parent_dir()
+    {
        # Utility function so we can test for things like .git/.hg without firingd
        # up a separate process
        test -d "$1" && return 0;
@@ -497,7 +501,8 @@ fi
        return 1;
     }
 
-    __vcs_name() {
+    __vcs_name()
+    {
        if [ -d .svn ]; then
            echo "-[svn]";
        elif __has_parent_dir ".git"; then
@@ -514,10 +519,7 @@ fi
         svn info | sed '/^Repository Root: /s/^.*: //' | sed 's/^/svn:/'
     }
 
-    vcsprompt()
-    {
-        vcsgetbranch 2>/dev/null | sed 's/^/\(/;s/$/\) /'
-    }
+    vcsprompt() { vcsgetbranch 2>/dev/null | sed 's/^/\(/;s/$/\) /' }
 
     # ----------------------
     # Git Aliases
@@ -555,7 +557,7 @@ fi
     # Git Functions
     # ----------------------
     # Git log find by commit message
-    function glf() { git log --all --grep="$1"; }
+    glf() { git log --all --grep="$1"; }
 
     # delete the remote branch
     #function gbdr() { git push origin --delete "$1"; }
