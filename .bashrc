@@ -92,6 +92,7 @@ fi
 
     #   Set Paths
     #   ------------------------------------------------------------
+    alias path='echo -e ${PATH//:/\\n}'
     # Ensure user-installed binaries take precedence
     export GEM_HOME=$HOME/.gem
     export PATH=$GEM_HOME/bin:$PATH
@@ -190,7 +191,7 @@ fi
     alias reload="source ~/.bash_profile"
 
     # grabs the latest .bash_profile file and reloads the prompt
-    alias updatebashrc="curl https://raw.github.com/w2pc/dotfiles/master/.bashrc > ~/.bashrc && reload"
+    alias updatebashrc="curl https://raw.github.com/scoutman57/dotfiles/master/.bashrc > ~/.bashrc && reload"
 
     # Directoy navigation aliases
     alias ls='ls -G'                  # Preferred 'ls' implementation
@@ -221,6 +222,7 @@ fi
     alias fix_stty='stty sane'                  # fix_stty:     Restore terminal settings when screwed up
     alias cic='set completion-ignore-case On'   # cic:          Make tab-completion case-insensitive
     mcd() { mkdir -p "$1" && cd "$1" ; }        # mcd:          Makes new Dir and jumps inside
+    alias mcd=mcd
     trash() { command mv "$@" ~/.Trash  ; }     # trash:        Moves a file to the MacOS trash
     ql() { qlmanage -p "$*" >& /dev/null ; }    # ql:           Opens any file in MacOS Quicklook Preview
     alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
@@ -345,6 +347,7 @@ fi
     #       Without the 'sudo' it will only find processes of the current user
     #   -----------------------------------------------------
     findPid() { lsof -t -c "$@" ; }
+    alias findPid=findPid
 
     #   memHogsTop, memHogsPs:  Find memory hogs
     #   -----------------------------------------------------
@@ -369,6 +372,10 @@ fi
     #   my_ps: List processes owned by my user:
     #   ------------------------------------------------------------
     my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,start,time,bsdtime,command ; }
+    alias my_ps=my_ps
+
+    alias h='history'
+    alias j='jobs -l'
 
 
 #   ---------------------------
@@ -387,6 +394,7 @@ fi
     alias showBlocked='sudo ipfw list'                  # showBlocked:  All ipfw rules inc/ blocked IPs
     portInfo() { sudo lsof -i :$1 ; }
     alias portInfo=portInfo                             # checkPort     Get info on connections on port
+    alias findPorts='sudo lsof -i -n -P'                # show all Ports
 
     #   ii:  display useful host related informaton
     #   -------------------------------------------------------------------
@@ -399,7 +407,7 @@ fi
         echo -e "\n${RED}Machine stats :$NC " ; uptime
         echo -e "\n${RED}Current network location :$NC " ; scselect
         echo -e "\n${RED}Public facing IP Address :$NC " ;myip
-        #echo -e "\n${RED}DNS Configuration:$NC " ; scutil --dns
+        echo -e "\n${RED}DNS Configuration:$NC " ; scutil --dns
         echo
     }
 
@@ -445,6 +453,13 @@ fi
 
     # Starts a php server
     phps() { php -S localhost:$1 ; }
+    alias phps=phps
+    alias a='php artisan'
+    #nlp() { composer create-project --prefer-dist laravel/laravel $1 ; }
+    alias nlfp='composer create-project --prefer-dist laravel/laravel'
+    alias nsfp='symfony new'
+    alias nlp='composer create-project --prefer-dist laravel/lumen'
+    alias phpunit='vendor/phpunit/phpunit/phpunit'
 #   ---------------------------------------
 #   9.  REMINDERS & NOTES
 #   ---------------------------------------
