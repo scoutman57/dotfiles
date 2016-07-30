@@ -194,7 +194,7 @@ fi
     alias updatebashrc="curl https://raw.github.com/scoutman57/dotfiles/master/.bashrc > ~/.bashrc && reload"
 
     # Directoy navigation aliases
-    alias ls='ls -G'                  # Preferred 'ls' implementation
+    alias ls='ls -G'                            # Preferred 'ls' implementation
     alias dir='dir --color=auto'                # Preferred 'dir' implementation
     alias vdir='vdir --color=auto'              # Preferred 'vdir' implementation
     alias grep='grep --color=auto'              # Preferred 'grep' implementation
@@ -243,7 +243,7 @@ fi
     #SSH Key Generation
     sshKeyGen()
     {
-        echo "What's the name of the Key (no spaced please) ? ";
+        echo "What's the name of the Key (no spaced please)? ";
         read name;
 
         echo "What's the email associated with it? ";
@@ -255,7 +255,19 @@ fi
         echo "SSH Public Key copied to your clipboard";
     }
 
-    ssh-copy-id() { cat ~/.ssh/id_rsa.pub | ssh $1 "mkdir ~/.ssh; cat >> ~/.ssh/authorized_keys" ; }
+    ssh-copy-id()
+    {
+        echo "What's the name of the Key (don't include .pub)? ";
+        read name;
+
+        echo "What's the ssh host name/ip? ";
+        read host;
+
+        cat ~/.ssh/$name.pub | ssh $host "mkdir ~/.ssh; cat >> ~/.ssh/authorized_keys" ;
+    }
+    alias ssh-copy-id=ssh-copy-id
+
+    ssh-add -K ~/.ssh/id_rsa_Acquire_4096
 
     # The skip command will just add some blank lines. I find this helpful when I have a lot of output from a command, and want to get some visual separation so I can easily spot my last command
     skip()
@@ -415,19 +427,16 @@ fi
 #   ---------------------------------------
 #   7.  SYSTEMS OPERATIONS & INFORMATION
 #   ---------------------------------------
-
     alias mountReadWrite='/sbin/mount -uw /'    # mountReadWrite:   For use when booted into single-user
-
-    #   cleanup:  Recursively delete .DS_Store & Thumbs.db files
-    #   -------------------------------------------------------------------
-    alias cleanup="find . -name '*.DS_Store' -type f -ls -delete && find . -name 'Thumbs.db' -type f -ls -delete && find . -name 'desktop.ini' -type f -ls -delete"
-
     #   finderShowHidden:   Show hidden files in Finder
     #   finderHideHidden:   Hide hidden files in Finder
     #   -------------------------------------------------------------------
     alias finderShowHidden='defaults write com.apple.finder AppleShowAllFiles -bool YES; killall -HUP Finder'
     alias finderHideHidden='defaults write com.apple.finder AppleShowAllFiles -bool NO; killall -HUP Finder'
 
+    #   cleanup:  Recursively delete .DS_Store & Thumbs.db files
+    #   -------------------------------------------------------------------
+    alias cleanup="find . -name '*.DS_Store' -type f -ls -delete && find . -name 'Thumbs.db' -type f -ls -delete && find . -name 'desktop.ini' -type f -ls -delete"
     #   cleanupLS:  Clean up LaunchServices to remove duplicates in the "Open With" menu
     #   -----------------------------------------------------------------------------------
     alias cleanupLS="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
@@ -460,6 +469,7 @@ fi
     alias nsfp='symfony new'
     alias nlp='composer create-project --prefer-dist laravel/lumen'
     alias phpunit='vendor/phpunit/phpunit/phpunit'
+    alias killphp='killall -KILL php-fpm; killall -KILL php'
 #   ---------------------------------------
 #   9.  REMINDERS & NOTES
 #   ---------------------------------------
