@@ -98,6 +98,7 @@ fi
     export PATH=$GEM_HOME/bin:$PATH
 
     export PATH="~/.composer/vendor/bin:$PATH"
+    export PATH="/.yarn/bin:$PATH"
     export PATH="/usr/local/sbin:$PATH"
     export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
     export PATH="$(brew --prefix homebrew/php/php70)/bin:$PATH"
@@ -267,7 +268,7 @@ fi
     }
     alias ssh-copy-id=ssh-copy-id
 
-    ssh-add -K ~/.ssh/id_rsa_Acquire_4096
+    ssh-add -K ~/.ssh/id_rsa_Acquire_4096 >/dev/null
 
     # The skip command will just add some blank lines. I find this helpful when I have a lot of output from a command, and want to get some visual separation so I can easily spot my last command
     skip()
@@ -407,6 +408,7 @@ fi
     portInfo() { sudo lsof -i :$1 ; }
     alias portInfo=portInfo                             # checkPort     Get info on connections on port
     alias findPorts='sudo lsof -i -n -P'                # show all Ports
+    alias findTCPPorts='sudo lsof -i TCP'               # show all TCP Ports
 
     #   ii:  display useful host related informaton
     #   -------------------------------------------------------------------
@@ -465,9 +467,16 @@ fi
     alias phps=phps
     alias a='php artisan'
     #nlp() { composer create-project --prefer-dist laravel/laravel $1 ; }
-    alias nlfp='composer create-project --prefer-dist laravel/laravel'
-    alias nsfp='symfony new'
-    alias nlp='composer create-project --prefer-dist laravel/lumen'
+    newLaravelP() {
+      git clone -b 5.3 git@github.com:InfyOmLabs/adminlte-generator.git $1;
+      cd $1;
+      composer install;
+    }
+
+    alias newLaravel='composer create-project --prefer-dist laravel/laravel'
+    alias newSymfony='symfony new'
+    alias newLumen='composer create-project --prefer-dist laravel/lumen'
+
     alias phpunit='vendor/phpunit/phpunit/phpunit'
     alias killphp='killall -KILL php-fpm; killall -KILL php'
 #   ---------------------------------------
