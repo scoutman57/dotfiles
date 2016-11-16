@@ -268,8 +268,6 @@ fi
     }
     alias ssh-copy-id=ssh-copy-id
 
-    ssh-add -K ~/.ssh/id_rsa_Acquire_4096 >/dev/null
-
     # The skip command will just add some blank lines. I find this helpful when I have a lot of output from a command, and want to get some visual separation so I can easily spot my last command
     skip()
     {
