@@ -617,8 +617,8 @@ fi
         git commit -m "$message"
     }
 
-    # git push <current-branch>
-    gp()
+    # git push origin <current-branch>
+    gpo()
     {
         branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
         if test -z "$branch" ; then
