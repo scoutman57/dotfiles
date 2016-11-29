@@ -2,14 +2,6 @@
 if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
-
-# Load the shell dotfiles, and then some:
-# * ~/.path can be used to extend `$PATH`.
-# * ~/.extra can be used for other settings you don’t want to commit.
-for file in ~/.{bash_prompt,exports,aliases,functions,extra}; do
-  [ -r "$file" ] && source "$file"
-done
-unset file
 #  ---------------------------------------------------------------------------
 #
 #  Description:  This file holds all my BASH configurations and aliases
@@ -536,6 +528,14 @@ unset file
         git push origin "$branch"
     }
 
+# Load the shell dotfiles, and then some:
+# * ~/.path can be used to extend `$PATH`.
+# * ~/.extra can be used for other settings you don’t want to commit.
+    for file in ~/.{bash_prompt,exports,aliases,functions,extra}; do
+      [ -r "$file" ] && source "$file"
+    done
+    unset file
+    
 #   ---------------------------------------
 #   Included dotfiles for specific servers
 #   or for sensitive information
