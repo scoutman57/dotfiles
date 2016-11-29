@@ -3,11 +3,13 @@ if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
 
-# Configure keyboard.
-if test -f ~/.inputrc ; then
-    bind -f ~/.inputrc
-fi
-
+# Load the shell dotfiles, and then some:
+# * ~/.path can be used to extend `$PATH`.
+# * ~/.extra can be used for other settings you don’t want to commit.
+for file in ~/.{bash_prompt,exports,aliases,functions,extra}; do
+  [ -r "$file" ] && source "$file"
+done
+unset file
 #  ---------------------------------------------------------------------------
 #
 #  Description:  This file holds all my BASH configurations and aliases
@@ -33,97 +35,9 @@ fi
 #   -------------------------------
 #   1.  ENVIRONMENT CONFIGURATION
 #   -------------------------------
-
-    #   Add color to terminal
-    #   (this is all commented out as I use Mac Terminal Profiles)
-    #   from http://osxdaily.com/2012/02/21/add-color-to-the-terminal-in-mac-os-x/
-    #   ------------------------------------------------------------
-    #   export CLICOLOR=1
-    #   export LSCOLORS=ExFxBxDxCxegedabagacad
-
-    # Set Colors
-    bold=$(tput -Txterm bold)
-    reset=$(tput -Txterm sgr0)
-    NO_COLOR="\[\033[00m\]" #black
-    NO_COLOR="\[\e[0;37m\]"
-    GREEN="\[\033[0;32m\]"
-    RED="\[\033[0;31m\]"
-    YELLOW="\[\033[0;33m\]"
-    LIGHT_CYAN="\[\033[0;36m\]"
-    LIGHT_GREEN="\[\033[1;32m\]"
-
-    # Set the directory color to light blue (cyan)
-    export LS_COLORS='di=01;36'
-
-    # Command Prompt
-    #   ---------------------------------------
-    # Set up a colorful command prompt,
-    # with the current git branch and the current directory.
-    #   ---------------------------------------
-    # export PS1="________________________________________________________________________________\n| \w @ \h (\u) \n| => "
-    # export PS2="| => "
-
-    # For a command prompt display like:
-    # JDoe@JDoes-MacBook-Pro (git:Jira-1327) ~/Code/MyProject $
-    #export PS1="\[\e[1;31m\]\u\[\e[0;37m\]@\[\e[1;32m\]\h\[\e[1;36m\] $(__vcs_name) \[\e[1;34m\]\w \[\e[1;35m\]\$ \[\e[0;37m\]"
-
-    # For a command prompt display like:
-    # JDoe@JDoes-MacBook-Pro[~/Code/MyProject](git:Jira-1327)
-    # $
-    #export PS1='\e[1;31m\]\u\[\e[0;37m\]@\[\e[1;32m\]\h\[$black\][\[\e[1;34m\]\w\[$black\]]\[\e[1;36m\]$(__vcs_name)\[$reset\]\n\[$reset\]\$ '
-
-    # For a command prompt display like:
-    # JDoe@JDoes-MacBook-Pro Jira-1327 ~/Code/MyProject $
-    # export PS1="\[\e[1;31m\]\u\[\e[0;37m\]@\[\e[1;32m\]\h\[\e[1;36m\] \`git rev-parse --abbrev-ref HEAD 2>/dev/null | sed 's/$/ /'\`\[\e[1;34m\]\w \[\e[1;35m\]\$ \[\e[0;37m\]"
-
-    # For a command prompt display like:
-    # Uses vcsprompt -- will show the VCS type: git, svn
-    # JDoe@JDoes-MacBook-Pro:~/Code/MyProject (git:Jira-1327)$
-    export PS1="$LIGHT_CYAN\u$NO_COLOR@$LIGHT_GREEN\h$NO_COLOR:\n$YELLOW\w$NO_COLOR $GREEN\$(vcsprompt)$NO_COLOR$ "
-    #export PS1="\u@\h:\w\$ ${reset}"
-
-    # For a command prompt display like:
-    # Using git rev-parse -- only shows branch for git VCS
-    # JDoe@JDoes-MacBook-Pro:~/Code/MyProject (Jira-1327)$
-    # export PS1="$LIGHT_CYAN\u\e[0;37m\]@\[\e[1;32m\]\h$NO_COLOR:$YELLOW\w$NO_COLOR $GREEN(\`git rev-parse --abbrev-ref HEAD 2>/dev/null | sed 's/$//'\`)$NO_COLOR$ "
-
-    #   Set architecture flags
-    #export ARCHFLAGS="-arch x86_64"
-
     #   Set Paths
     #   ------------------------------------------------------------
     alias path='echo -e ${PATH//:/\\n}'
-    # Ensure user-installed binaries take precedence
-    export GEM_HOME=$HOME/.gem
-    export PATH=$GEM_HOME/bin:$PATH
-
-    export PATH="~/.composer/vendor/bin:$PATH"
-    export PATH="/.yarn/bin:$PATH"
-    export PATH="/usr/local/sbin:$PATH"
-    export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
-    export PATH="$(brew --prefix homebrew/php/php70)/bin:$PATH"
-    export PATH="/usr/local:$PATH"
-    export PATH="/Applications/PhpStorm EAP.app/Contents/MacOS:$PATH"
-
-    #set ruby manager from homebrew
-    #export RBENV_ROOT=/usr/local/var/rbenv
-    #eval "$(rbenv init -)"
-    #if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
-    # Conditionally add some things to $PATH, if they exist.
-    for d in ~/bin ~/usr/bin ; do
-      if test -d "$d" && ! echo "$PATH" | grep -q $(readlink -e "$d") ; then
-        PATH="$d":"$PATH"
-      fi
-    done
-
-    # Conditionally add some things to $LD_LIBRARY_PATH (shared libs).
-    for d in ~/usr/lib ; do
-      if test -d "$d" ; then
-        LD_LIBRARY_PATH="$d":"$LD_LIBRARY_PATH"
-      fi
-    done
-    export LD_LIBRARY_PATH
 
     # Add bash-completion if installed from homebrew
     if [ -f $(brew --prefix)/etc/bash_completion ]; then
@@ -138,7 +52,6 @@ fi
     #   ------------------------------------------------------------
         #export EDITOR=/usr/bin/vi
         #export EDITOR='atom -w'
-
 
         # opens file or folder with sublime
         alias sublime='open -a "Sublime Text"'
@@ -184,12 +97,24 @@ fi
 #   -----------------------------
 #   2.  MAKE TERMINAL BETTER
 #   -----------------------------
+    # Detect which `ls` flavor is in use
+    if ls --color > /dev/null 2>&1; then # GNU `ls`
+    colorflag="--color"
+    else # OS X `ls`
+    colorflag="-G"
+    fi
 
+    #   Add color to terminal
+    #   (this is all commented out as I use Mac Terminal Profiles)
+    #   from http://osxdaily.com/2012/02/21/add-color-to-the-terminal-in-mac-os-x/
+    #   ------------------------------------------------------------
+       #export CLICOLOR=1
+       #export LSCOLORS=ExFxBxDxCxegedabagacad
     # iTerm2 custom title on each tab
-    export PROMPT_COMMAND='echo -ne "\033]0;$PWD\007"'
+    #export PROMPT_COMMAND='echo -ne "\033]0;$PWD\007"'
 
     # reloads the prompt, usefull to take new modifications into account
-    alias reload="source ~/.bash_profile"
+    alias reload="source ~/.bashrc"
 
     # grabs the latest .bash_profile file and reloads the prompt
     alias updatebashrc="curl https://raw.github.com/scoutman57/dotfiles/master/.bashrc > ~/.bashrc && reload"
@@ -205,7 +130,8 @@ fi
     alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
     alias ll='ls -FGlAhp'                       # Preferred 'ls' implementation
     alias less='less -FSRXc'                    # Preferred 'less' implementation
-    cd() { builtin cd "$@"; ls ; }               # Always list directory contents upon 'cd'
+    alias lsd='ls -l | grep "^d"'               # List only directories
+    cd() { builtin cd "$@"; ls ; }              # Always list directory contents upon 'cd'
     alias cd..='cd ../'                         # Go back 1 directory level (for fast typers)
     alias ..='cd ../'                           # Go back 1 directory level
     alias ...='cd ../../'                       # Go back 2 directory levels
@@ -222,7 +148,7 @@ fi
     alias show_options='shopt'                  # Show_options: display bash options settings
     alias fix_stty='stty sane'                  # fix_stty:     Restore terminal settings when screwed up
     alias cic='set completion-ignore-case On'   # cic:          Make tab-completion case-insensitive
-    mcd() { mkdir -p "$1" && cd "$1" ; }        # mcd:          Makes new Dir and jumps inside
+    mcd() { mkdir -p "$1" && cd "$_" ; }        # mcd:          Makes new Dir and jumps inside
     alias mcd=mcd
     trash() { command mv "$@" ~/.Trash  ; }     # trash:        Moves a file to the MacOS trash
     ql() { qlmanage -p "$*" >& /dev/null ; }    # ql:           Opens any file in MacOS Quicklook Preview
@@ -282,6 +208,13 @@ fi
         done
     }
 
+    # lock computer
+    alias lock='/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend'
+    # hibernation and sleep settings
+    alias hibernate='sudo pmset -a hibernatemode 25'
+    alias sleep='sudo pmset -a hibernatemode 0'
+    alias safesleep='sudo pmset -a hibernatemode 3'
+    alias smartsleep='sudo pmset -a hibernatemode 2'
 
 #   -------------------------------
 #   3.  FILE AND FOLDER MANAGEMENT
@@ -392,7 +325,6 @@ fi
 #   ---------------------------
 #   6.  NETWORKING
 #   ---------------------------
-
     alias myip='curl ip.appspot.com'                    # myip:         Public facing IP Address
     alias netCons='lsof -i'                             # netCons:      Show all open TCP/IP sockets
     alias flushDNS='dscacheutil -flushcache'            # flushDNS:     Flush out the DNS Cache
@@ -477,6 +409,10 @@ fi
 
     alias phpunit='vendor/phpunit/phpunit/phpunit'
     alias killphp='killall -KILL php-fpm; killall -KILL php'
+    function homestead() {
+    ( cd ~/Code/Homestead && vagrant $* )
+}
+
 #   ---------------------------------------
 #   9.  REMINDERS & NOTES
 #   ---------------------------------------
@@ -513,56 +449,22 @@ fi
     # curl https://raw.github.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.sh
     source ~/.git-completion.sh
 
-    # curl https://raw.github.com/git/git/master/contrib/completion/git-prompt.sh -o ~/.git-prompt.sh
-    source ~/.git-prompt.sh
-
-    # Lets figure out what out what type of source control we are using.
-    __has_parent_dir()
-    {
-       # Utility function so we can test for things like .git/.hg without firingd
-       # up a separate process
-       test -d "$1" && return 0;
-
-       current="."
-       while [ ! "$current" -ef "$current/.." ]; do
-           if [ -d "$current/$1" ]; then
-               return 0;
-           fi
-           current="$current/..";
-       done
-
-       return 1;
+    function parse_git_dirty() {
+      [[ $(git status 2> /dev/null | tail -n1) != *"working directory clean"* ]] && echo "*"
     }
 
-    __vcs_name()
-    {
-       if [ -d .svn ]; then
-           echo "-[svn]";
-       elif __has_parent_dir ".git"; then
-           __git_ps1 'git:%s' | sed 's/^/\(/;s/$/\)/';
-       elif __has_parent_dir ".hg"; then
-           echo "(hg:$(hg branch))"
-       fi
+    function parse_git_branch() {
+      git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
     }
-
-    vcsgetbranch()
-    {
-        git rev-parse --abbrev-ref HEAD | sed 's/^/git:/' ||
-        hg branch | sed 's/^/hg:/' ||
-        svn info | sed '/^Repository Root: /s/^.*: //' | sed 's/^/svn:/'
-    }
-
-    vcsprompt() { vcsgetbranch 2>/dev/null | sed 's/^/\(/;s/$/\) /' ; }
 
     # ----------------------
     # Git Aliases
     # ----------------------
+    alias g='git'
     alias ga='git add'
-    alias gaa='git add .'
-    alias gaaa='git add -A'
     alias gb='git branch'
     # Git - delete a local branch
-    alias gbd='git branch -d'
+    alias gbd='git branch -D'
     # Git - delete a remote branch
     alias gbdr='git push origin --delete'
     alias gc='git commit'
@@ -570,8 +472,9 @@ fi
     alias gco='git checkout'
     alias gcob='git checkout -b'
     alias gcom='git checkout master'
+    alias gcr='git clone'
     alias gd='git diff'
-    alias gda='git diff HEAD'
+    alias gdh='git diff HEAD'
     alias gi='git init'
     # Git - compact, colorized git log
     alias gl="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr %ad) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short --all"
@@ -589,6 +492,10 @@ fi
     # ----------------------
     # Git Functions
     # ----------------------
+    #find all origin urls for sub folders
+    alias fgo='find . -name "config"  -type f  -depth 4 | xargs grep "url" --color=auto'
+    #update all git repos in subfolders
+    alias uap='find . -name .git -type d -depth 3 | xargs -n1 -P4 -I% git --git-dir=% --work-tree=%/.. pull --all'
     # Git log find by commit message
     glf() { git log --all --grep="$1" ; }
 
@@ -617,7 +524,7 @@ fi
         git commit -m "$message"
     }
 
-    # git push origin <current-branch>
+    # git push <current-branch>
     gpo()
     {
         branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
@@ -633,5 +540,4 @@ fi
 #   Included dotfiles for specific servers
 #   or for sensitive information
 #   ---------------------------------------
-
     source "/Users/$(whoami)/Google Drive/.dotfiles/.private"
