@@ -504,7 +504,7 @@ fi
     #find all origin urls for sub folders
     alias fgo='cd ~/Code && find . -name "config"  -type f  -maxdepth 2 | xargs grep "url" --color=auto'
     #update all git repos in subfolders
-    alias uap='cd ~/Code && find . -name .git -type d -maxdepth 2 | xargs -n1 -P4 -I% git --git-dir=% --work-tree=%/.. pull --all'
+    alias uap='cd ~/Code && find . -name .git -type d -maxdepth 2 | xargs -n1 -P4 -I% git --git-dir=% --work-tree=%/.. fetch origin'
     # Git log find by commit message
     glf() { git log --all --grep="$1" ; }
 
