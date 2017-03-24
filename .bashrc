@@ -331,6 +331,7 @@ fi
     alias portInfo=portInfo                             # checkPort     Get info on connections on port
     alias findPorts='sudo lsof -i -n -P'                # show all Ports
     alias findTCPPorts='sudo lsof -i TCP'               # show all TCP Ports
+    alias editDnsmasq='edit /usr/local/etc/dnsmasq.conf'
 
     #   ii:  display useful host related informaton
     #   -------------------------------------------------------------------
@@ -373,6 +374,12 @@ fi
 #   8.  WEB DEVELOPMENT
 #   ---------------------------------------
 
+    alias grey-grep="GREP_COLOR='1;30' grep -E --color=always --line-buffered"
+    alias red-grep="GREP_COLOR='1;31' grep -E --color=always --line-buffered"
+    alias green-grep="GREP_COLOR='1;32' grep -E --color=always --line-buffered"
+    alias yellow-grep="GREP_COLOR='1;33' grep -E --color=always --line-buffered"
+    alias cyan-grep="GREP_COLOR='1;36' grep -E --color=always --line-buffered"
+
     alias apacheEdit='sudo edit /etc/httpd/httpd.conf'      # apacheEdit:       Edit httpd.conf
     alias apacheRestart='sudo apachectl graceful'           # apacheRestart:    Restart Apache
     alias editHosts='sudo edit /etc/hosts'                  # editHosts:        Edit /etc/hosts file
@@ -387,13 +394,23 @@ fi
     # Starts a php server
     phps() { php -S localhost:$1 ; }
     alias phps=phps
-    alias a='php artisan'
+    alias art='php artisan'
     #nlp() { composer create-project --prefer-dist laravel/laravel $1 ; }
     newLaravelP() {
       git clone -b 5.3 git@github.com:InfyOmLabs/adminlte-generator.git $1;
       cd $1;
       composer install;
     }
+
+    function new() {
+  	  if [ "$1" == "laravel" ]; then
+  	      composer create-project --prefer-dist laravel/laravel $2
+  	  elif [ "$1" == "symfony" ]; then
+  	      symfony new $2
+        elif [ "$1" == "lumen" ]; then
+          composer create-project --prefer-dist laravel/lumen $2
+  	  fi
+  	}
 
     alias newLaravel='composer create-project --prefer-dist laravel/laravel'
     alias newSymfony='symfony new'
@@ -485,9 +502,9 @@ fi
     # Git Functions
     # ----------------------
     #find all origin urls for sub folders
-    alias fgo='find . -name "config"  -type f  -depth 4 | xargs grep "url" --color=auto'
+    alias fgo='cd ~/Code && find . -name "config"  -type f  -maxdepth 2 | xargs grep "url" --color=auto'
     #update all git repos in subfolders
-    alias uap='find . -name .git -type d -depth 3 | xargs -n1 -P4 -I% git --git-dir=% --work-tree=%/.. pull --all'
+    alias uap='cd ~/Code && find . -name .git -type d -maxdepth 2 | xargs -n1 -P4 -I% git --git-dir=% --work-tree=%/.. pull --all'
     # Git log find by commit message
     glf() { git log --all --grep="$1" ; }
 
@@ -535,9 +552,12 @@ fi
       [ -r "$file" ] && source "$file"
     done
     unset file
-    
+
 #   ---------------------------------------
 #   Included dotfiles for specific servers
 #   or for sensitive information
 #   ---------------------------------------
-    source "/Users/$(whoami)/Google Drive/.dotfiles/.private"
+  PRIVATE_DIRECTORY="/Users/$(whoami)/Google Drive/.dotfiles/"
+  if [ -d "$PRIVATE_DIRECTORY" ]; then
+    for i in "$PRIVATE_DIRECTORY"*.bash; do . "$i"; done
+  fi
