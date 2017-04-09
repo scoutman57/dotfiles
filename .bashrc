@@ -145,6 +145,9 @@ fi
     trash() { command mv "$@" ~/.Trash  ; }     # trash:        Moves a file to the MacOS trash
     ql() { qlmanage -p "$*" >& /dev/null ; }    # ql:           Opens any file in MacOS Quicklook Preview
     alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
+    alias copy='rsync -a -v --ignore-existing'  # Copy files with rsync if don't already exist
+    alias iw='itermocil'
+    complete -W "$(itermocil --list)" itermocil
 
     #   lr:  Full Recursive Directory Listing
     #   ------------------------------------------
@@ -383,24 +386,22 @@ fi
     alias apacheEdit='sudo edit /etc/httpd/httpd.conf'      # apacheEdit:       Edit httpd.conf
     alias apacheRestart='sudo apachectl graceful'           # apacheRestart:    Restart Apache
     alias editHosts='sudo edit /etc/hosts'                  # editHosts:        Edit /etc/hosts file
-    alias tailLogs='tail /var/log/httpd/error_log'              # herr:             Tails HTTP error logs
-    alias apacheLogs="less +F /var/log/apache2/error_log"   # Apachelogs:   Shows apache error logs
-    httpHeaders() { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grabs headers from web page
+    alias tailLogs='tail /var/log/httpd/error_log'          # herr:             Tails HTTP error logs
+    alias apacheLogs="less +F /var/log/apache2/error_log"   # Apachelogs:       Shows apache error logs
+    httpHeaders() { /usr/bin/curl -I -L $@ ; }              # httpHeaders:      Grabs headers from web page
 
     #   httpDebug:  Download a web page and show info on what took time
     #   -------------------------------------------------------------------
     httpDebug() { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
 
+    alias pgsqlConf='edit /usr/local/var/postgres/postgresql.conf'
+    alias pgsqlLogs='tail -f /usr/local/var/postgres/pg_log/postgresql.log'
     # Starts a php server
     phps() { php -S localhost:$1 ; }
     alias phps=phps
     alias art='php artisan'
-    #nlp() { composer create-project --prefer-dist laravel/laravel $1 ; }
-    newLaravelP() {
-      git clone -b 5.3 git@github.com:InfyOmLabs/adminlte-generator.git $1;
-      cd $1;
-      composer install;
-    }
+    alias tinker='php artisan tinker'
+    alias phpunit='vendor/phpunit/phpunit/phpunit'
 
     function new() {
   	  if [ "$1" == "laravel" ]; then
@@ -409,18 +410,18 @@ fi
   	      symfony new $2
         elif [ "$1" == "lumen" ]; then
           composer create-project --prefer-dist laravel/lumen $2
+      elif [ "$1" == "laravelcrud" ]; then
+          git clone -b 5.3 git@github.com:InfyOmLabs/adminlte-generator.git $2;
+          cd $1;
+          composer install;
+      elif [ "$1" == "meteor" ]; then
+          meteor create $2
+          cd $1
+          meteor
   	  fi
   	}
 
-    alias newLaravel='composer create-project --prefer-dist laravel/laravel'
-    alias newSymfony='symfony new'
-    alias newLumen='composer create-project --prefer-dist laravel/lumen'
-
-    alias phpunit='vendor/phpunit/phpunit/phpunit'
     alias killphp='killall -KILL php-fpm; killall -KILL php'
-    function homestead() {
-    ( cd ~/Code/Homestead && vagrant $* )
-}
 
 #   ---------------------------------------
 #   9.  REMINDERS & NOTES
@@ -502,9 +503,9 @@ fi
     # Git Functions
     # ----------------------
     #find all origin urls for sub folders
-    alias fgo='cd ~/Code && find . -name "config"  -type f  -maxdepth 2 | xargs grep "url" --color=auto'
+    alias fgo='cd ~/Code && find . -name "config"  -type f  -maxdepth 4 | xargs grep "url" --color=auto'
     #update all git repos in subfolders
-    alias uap='cd ~/Code && find . -name .git -type d -maxdepth 2 | xargs -n1 -P4 -I% git --git-dir=% --work-tree=%/.. fetch origin'
+    alias uap="cd ~/Code && find . -name .git -type d -maxdepth 2 | xargs -n1 -P1 -I% bash -c 'git --git-dir=% remote get-url origin; git --git-dir=% --work-tree=%/.. fetch origin;'"
     # Git log find by commit message
     glf() { git log --all --grep="$1" ; }
 
