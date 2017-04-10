@@ -362,6 +362,10 @@ fi
     alias finderShowHidden='defaults write com.apple.finder AppleShowAllFiles -bool YES; killall -HUP Finder'
     alias finderHideHidden='defaults write com.apple.finder AppleShowAllFiles -bool NO; killall -HUP Finder'
 
+    # update system packages
+    alias update='brew update && brew upgrade && brew cu && brew cleanup; brew doctor; npm update -g; composer global update'
+    alias clean='cleanup; cleanupLS; brew cleanup; '
+
     #   cleanup:  Recursively delete .DS_Store & Thumbs.db files
     #   -------------------------------------------------------------------
     alias cleanup="find . -name '*.DS_Store' -type f -ls -delete && find . -name 'Thumbs.db' -type f -ls -delete && find . -name 'desktop.ini' -type f -ls -delete"
@@ -385,9 +389,15 @@ fi
 
     alias apacheEdit='sudo edit /etc/httpd/httpd.conf'      # apacheEdit:       Edit httpd.conf
     alias apacheRestart='sudo apachectl graceful'           # apacheRestart:    Restart Apache
-    alias editHosts='sudo edit /etc/hosts'                  # editHosts:        Edit /etc/hosts file
-    alias tailLogs='tail /var/log/httpd/error_log'          # herr:             Tails HTTP error logs
     alias apacheLogs="less +F /var/log/apache2/error_log"   # Apachelogs:       Shows apache error logs
+
+    alias nginxLogs='tail -f /usr/local/var/log/nginx/error.log'
+    alias editHosts='sudo edit /etc/hosts'                  # editHosts:        Edit /etc/hosts file
+
+    alias phpLogs='tail -f /usr/local/var/log/php-fpm.log'
+
+    alias logs='tail -f /usr/local/var/log/php-fpm.log /usr/local/var/log/nginx/error.log /usr/local/var/log/redis.log /usr/local/var/log/mongodb/*.log /usr/local/var/log/rabbitmq/*.log'
+    #sudo tail -f /var/log/disco/*log /var/log/apache2/error.log
     httpHeaders() { /usr/bin/curl -I -L $@ ; }              # httpHeaders:      Grabs headers from web page
 
     #   httpDebug:  Download a web page and show info on what took time
@@ -395,7 +405,8 @@ fi
     httpDebug() { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
 
     alias pgsqlConf='edit /usr/local/var/postgres/postgresql.conf'
-    alias pgsqlLogs='tail -f /usr/local/var/postgres/pg_log/postgresql.log'
+    #alias pgsqlLogs='tail -f /usr/local/var/postgres/pg_log/postgresql.log'
+    alias pgsqlLogs='tail -f /usr/local/var/log/postgresql.log'
     # Starts a php server
     phps() { php -S localhost:$1 ; }
     alias phps=phps
