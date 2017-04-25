@@ -100,7 +100,6 @@
       alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
       alias copy='rsync -a -v --ignore-existing'  # Copy files with rsync if don't already exist
       alias iw='itermocil'
-      complete -W "$(itermocil --list)" itermocil
 
     #   lr:  Full Recursive Directory Listing
     #   ------------------------------------------
@@ -471,7 +470,7 @@
         git push origin "$branch"
     }
 
-    ---------------------------------------
+    #   ---------------------------------------
     #   Included private aliases for specific clients
     #   or for sensitive information
     #   ---------------------------------------
