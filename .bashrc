@@ -87,6 +87,9 @@ fi
     function parse_git_branch() {
       git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
     }
+    
+    # autocompletion for itermocil https://github.com/TomAnthony/itermocil
+    complete -W "$(itermocil --list)" itermocil
 
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
