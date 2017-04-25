@@ -1,7 +1,7 @@
-
+# Source global definitions
 #  ---------------------------------------------------------------------------
 #
-#  Description:  This file holds all my generic configurations and aliases
+#  Description:  This file holds all my BASH configurations and aliases
 #
 #  ***NOTE*** for OSX you will need the following installed vi homebrew
 #  brew install coreutils
@@ -417,20 +417,6 @@
     #   the above create files that are almost all zeros - if random bytes are desired
     #   then use: ~/Dev/Perl/randBytes 1048576 > 10MB.dat
 
-#   ---------------------------------------
-#   10.  VERSION CONTROL SYSTEMS
-#   ---------------------------------------
-    # curl https://raw.github.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.sh
-    source ~/.git-completion.sh
-
-    function parse_git_dirty() {
-      [[ $(git status 2> /dev/null | tail -n1) != *"working directory clean"* ]] && echo "*"
-    }
-
-    function parse_git_branch() {
-      git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
-    }
-
     # ----------------------
     # Git Aliases
     # ----------------------
@@ -485,19 +471,11 @@
         git push origin "$branch"
     }
 
-# Load the shell dotfiles, and then some:
-# * ~/.path can be used to extend `$PATH`.
-# * ~/.extra can be used for other settings you don’t want to commit.
-    for file in ~/.{bash_prompt,exports,aliases,functions,extra}; do
-      [ -r "$file" ] && source "$file"
-    done
-    unset file
-
-#   ---------------------------------------
-#   Included dotfiles for specific servers
-#   or for sensitive information
-#   ---------------------------------------
-  PRIVATE_DIRECTORY="/Users/$(whoami)/Google Drive/.dotfiles/"
-  if [ -d "$PRIVATE_DIRECTORY" ]; then
-    for i in "$PRIVATE_DIRECTORY"*.aliases; do . "$i"; done
-  fi
+    ---------------------------------------
+    #   Included private aliases for specific clients
+    #   or for sensitive information
+    #   ---------------------------------------
+    PRIVATE_DIRECTORY="/Users/$(whoami)/Google Drive/.dotfiles/.aliases/"
+    if [ -d "$PRIVATE_DIRECTORY" ]; then
+     for i in "$PRIVATE_DIRECTORY"*.aliases; do . "$i"; done
+    fi
