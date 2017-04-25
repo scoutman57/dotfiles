@@ -100,7 +100,7 @@ fi
 #   Included dotfiles for specific servers
 #   or for sensitive information
 #   ---------------------------------------
-  PRIVATE_DIRECTORY="/Users/$(whoami)/Google Drive/.dotfiles/"
+  PRIVATE_DIRECTORY="/Users/$(whoami)/Google Drive/.dotfiles/.aliases/"
   if [ -d "$PRIVATE_DIRECTORY" ]; then
     for i in "$PRIVATE_DIRECTORY"*.aliases; do . "$i"; done
   fi
