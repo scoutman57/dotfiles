@@ -73,6 +73,20 @@ fi
 
     # grabs the latest .bash_profile file and reloads the prompt
     alias updatebashrc="curl https://raw.github.com/scoutman57/dotfiles/master/.bashrc > ~/.bashrc && reload"
+    
+    #   ---------------------------------------
+#   10.  VERSION CONTROL SYSTEMS
+#   ---------------------------------------
+    # curl https://raw.github.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.sh
+    source ~/.git-completion.sh
+
+    function parse_git_dirty() {
+      [[ $(git status 2> /dev/null | tail -n1) != *"working directory clean"* ]] && echo "*"
+    }
+
+    function parse_git_branch() {
+      git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
+    }
 
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
