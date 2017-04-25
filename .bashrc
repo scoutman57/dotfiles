@@ -56,7 +56,7 @@ fi
         # diff <path to file1> <path to file2>
         psdiff()
         {
-            phpstorm diff $(realpath "$1") $(realpath "$2")
+            /Applications/PhpStorm.app/Contents/MacOS/PhpStorm diff $(realpath "$1") $(realpath "$2")
             echo "Diff: $(realpath $1) $(realpath $2) $(realpath $3) $(realpath $4)"
         }
 
@@ -67,7 +67,7 @@ fi
         # file3 is the base revision for file1 and file2, file4 (output) is the file to save the merge results in (optional)
         merge()
         {
-            phpstorm merge $(realpath "$1") $(realpath "$2") $(realpath "$3") $(realpath "$4")
+            /Applications/PhpStorm.app/Contents/MacOS/PhpStorm merge $(realpath "$1") $(realpath "$2") $(realpath "$3") $(realpath "$4")
             echo "Merge: $(realpath $1) $(realpath $2) $(realpath $3) $(realpath $4)"
         }
 
@@ -571,5 +571,5 @@ fi
 #   ---------------------------------------
   PRIVATE_DIRECTORY="/Users/$(whoami)/Google Drive/.dotfiles/"
   if [ -d "$PRIVATE_DIRECTORY" ]; then
-    for i in "$PRIVATE_DIRECTORY"*.bash; do . "$i"; done
+    for i in "$PRIVATE_DIRECTORY"*.aliases; do . "$i"; done
   fi
