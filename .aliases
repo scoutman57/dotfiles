@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Source global definitions
 #  ---------------------------------------------------------------------------
 #
@@ -36,12 +38,11 @@
     #   Set Default Editor
     #   ------------------------------------------------------------
         #export EDITOR=/usr/bin/vi
-        export EDITOR='atom -w'
+        export VISUAL="atom-beta -w"
+        export EDITOR=VISUAL
 
-        # opens file or folder with sublime
-        alias sublime='open -a "Sublime Text"'
-        # opens file or folder with atom.io
-        alias atom='open -a "Atom"'
+        alias atom="atom-beta"
+        alias apm="apm-beta"
 
     #   Set Default Diff (change 'phpstorm' to the editor of your choice)
     #   ------------------------------------------------------------
@@ -64,6 +65,9 @@
             echo "Merge: $(realpath $1) $(realpath $2) $(realpath $3) $(realpath $4)"
         }
 
+        encrypt(){ openssl enc -aes-256-cbc -e -in $1 -out $2 }
+        decrypt(){ openssl enc -aes-256-cbc -d -in $1 -out $2 }
+
     # Directoy navigation aliases
       alias ls='ls -G'                            # Preferred 'ls' implementation
       alias dir='dir --color=auto'                # Preferred 'dir' implementation
@@ -84,11 +88,12 @@
       alias .4='cd ../../../../'                  # Go back 4 directory levels
       alias .5='cd ../../../../../'               # Go back 5 directory levels
       alias .6='cd ../../../../../../'            # Go back 6 directory levels
-      alias edit='atom'                           # edit:         Opens any file in atom editor
+      alias edit='atom-beta'                           # edit:         Opens any file in atom editor
       alias f='open -a Finder ./'                 # f:            Opens current directory in MacOS Finder
       alias ~="cd ~"                              # ~:            Go Home
       alias c='clear'                             # c:            Clear terminal display
-      alias which='type -all'                     # which:        Find executables
+      #alias which='type -all'                     # which:        Find executables
+      alias which='type -a'                       # which:        Find executables
       alias path='echo -e ${PATH//:/\\n}'         # path:         Echo all executable Paths
       alias show_options='shopt'                  # Show_options: display bash options settings
       alias fix_stty='stty sane'                  # fix_stty:     Restore terminal settings when screwed up
@@ -98,7 +103,8 @@
       trash() { command mv "$@" ~/.Trash  ; }     # trash:        Moves a file to the MacOS trash
       ql() { qlmanage -p "$*" >& /dev/null ; }    # ql:           Opens any file in MacOS Quicklook Preview
       alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
-      alias copy='rsync -a -v --ignore-existing'  # Copy files with rsync if don't already exist
+      alias copy='rsync -avrq --ignore-existing'  # Copy files with rsync if don't already exist, quite mode
+      alias copy-progress='rsync -avrP --human-readable --ignore-existing'
       alias iw='itermocil'
 
     #   lr:  Full Recursive Directory Listing
@@ -109,10 +115,6 @@
     #           displays paginated result with colored search terms and two lines surrounding each hit.             Example: mans mplayer codec
     #   --------------------------------------------------------------------
         mans() { man $1 | grep -iC2 --color=always $2 | less ; }
-
-    #   showa: to remind yourself of an alias (given some part of it)
-    #   ------------------------------------------------------------
-        showa() { /usr/bin/grep --color=always -i -a1 $@ ~/.bashrc | grep -v '^\s*$' | less -FSRXc ; }
 
     #SSH Key Generation
     sshKeyGen()
@@ -128,6 +130,7 @@
 
         echo "SSH Public Key copied to your clipboard";
     }
+    alias ssh-key-gen=sshKeyGen
 
     ssh-copy-id()
     {
@@ -315,7 +318,7 @@
     alias finderHideHidden='defaults write com.apple.finder AppleShowAllFiles -bool NO; killall -HUP Finder'
 
     # update system packages
-    alias update='brew update && brew upgrade && brew cu && brew cleanup; brew doctor; npm update -g; composer global update'
+    alias update='brew update && brew upgrade && brew cu --all --yes && brew cleanup; brew doctor; composer global update; npm update -g'
     alias clean='cleanup; cleanupLS; brew cleanup; '
 
     #   cleanup:  Recursively delete .DS_Store & Thumbs.db files
@@ -332,19 +335,13 @@
 #   ---------------------------------------
 #   8.  WEB DEVELOPMENT
 #   ---------------------------------------
-
-    alias grey-grep="GREP_COLOR='1;30' grep -E --color=always --line-buffered"
-    alias red-grep="GREP_COLOR='1;31' grep -E --color=always --line-buffered"
-    alias green-grep="GREP_COLOR='1;32' grep -E --color=always --line-buffered"
-    alias yellow-grep="GREP_COLOR='1;33' grep -E --color=always --line-buffered"
-    alias cyan-grep="GREP_COLOR='1;36' grep -E --color=always --line-buffered"
-
     alias apacheEdit='sudo edit /etc/httpd/httpd.conf'      # apacheEdit:       Edit httpd.conf
     alias apacheRestart='sudo apachectl graceful'           # apacheRestart:    Restart Apache
     alias apacheLogs="less +F /var/log/apache2/error_log"   # Apachelogs:       Shows apache error logs
 
     alias nginxLogs='tail -f /usr/local/var/log/nginx/error.log'
     alias editHosts='sudo edit /etc/hosts'                  # editHosts:        Edit /etc/hosts file
+    alias sshhosts="grep -w -i "Host" ~/.ssh/config | sed 's/Host//'"  #show all ssh host aliases
 
     alias phpLogs='tail -f /usr/local/var/log/php-fpm.log'
 
@@ -364,22 +361,25 @@
     alias phps=phps
     alias art='php artisan'
     alias tinker='php artisan tinker'
-    alias phpunit='vendor/phpunit/phpunit/phpunit'
+    #alias phpunit='vendor/phpunit/phpunit/phpunit'
 
     function new() {
-  	  if [ "$1" == "laravel" ]; then
-  	      composer create-project --prefer-dist laravel/laravel $2
-  	  elif [ "$1" == "symfony" ]; then
+  	  if [[ "$1" == "laravel" ]]; then
+  	      composer create-project laravel/laravel $2 $3
+          cd $2;
+  	  elif [[ "$1" == "symfony" ]]; then
   	      symfony new $2
-        elif [ "$1" == "lumen" ]; then
-          composer create-project --prefer-dist laravel/lumen $2
-      elif [ "$1" == "laravelcrud" ]; then
-          git clone -b 5.3 git@github.com:InfyOmLabs/adminlte-generator.git $2;
-          cd $1;
+          cd $2;
+        elif [[ "$1" == "lumen" ]]; then
+          composer create-project laravel/lumen $2 $3
+          cd $2;
+      elif [[ "$1" == "laravelcrud" ]]; then
+          git clone git@github.com:InfyOmLabs/adminlte-generator.git $2;
+          cd $2;
           composer install;
-      elif [ "$1" == "meteor" ]; then
+      elif [[ "$1" == "meteor" ]]; then
           meteor create $2
-          cd $1
+          cd $2
           meteor
   	  fi
   	}
@@ -417,24 +417,8 @@
     #   then use: ~/Dev/Perl/randBytes 1048576 > 10MB.dat
 
     # ----------------------
-    # Git Aliases
-    # ----------------------
-    # Git - compact, colorized git log
-    alias gl="git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr %ad) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short --all"
-    # Git - Visualize git log
-    alias glg='git log --graph --full-history --oneline --decorate --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s"'
-    alias gs='echo ""; echo "*********************************************"; echo -e "   DO NOT FORGET TO PULL BEFORE COMMITTING"; echo "*********************************************"; echo ""; git status'
-    alias gss='git status -s'
-
-    # ----------------------
     # Git Functions
     # ----------------------
-    #find all origin urls for sub folders
-    alias fgo='cd ~/Code && find . -name "config"  -type f  -maxdepth 4 | xargs grep "url" --color=auto'
-    #update all git repos in subfolders
-    alias uap="cd ~/Code && find . -name .git -type d -maxdepth 3 | xargs -n1 -P1 -I% bash -c 'git --git-dir=% remote get-url origin; git --git-dir=% --work-tree=%/.. fetch origin;'"
-    # Git log find by commit message
-    glf() { git log --all --grep="$1" ; }
 
     # git commit, and prefix/prepend the current branch name to the message.
     gcmb()
@@ -457,24 +441,14 @@
         echo "git commit -m '$message'"
         git commit -m "$message"
     }
-
-    # git push <current-branch>
-    gpo()
-    {
-        branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-        if test -z "$branch" ; then
-            echo "You are not inside of a git repository, or HEAD is detached." 1>&2
-            return 1
-        fi
-        echo "git push origin $branch"
-        git push origin "$branch"
-    }
+    alias gcmb=gcmb
+    alias gpurge='git branch --merged | grep -v "\*" | grep -v "master" | grep -v "develop" | grep -v "staging" | xargs -n 1 git branch -d'
 
     #   ---------------------------------------
     #   Included private aliases for specific clients
     #   or for sensitive information
     #   ---------------------------------------
     PRIVATE_DIRECTORY="/Users/$(whoami)/Google Drive/.dotfiles/.aliases/"
-    if [ -d "$PRIVATE_DIRECTORY" ]; then
+    if [[ -d "$PRIVATE_DIRECTORY" ]]; then
      for i in "$PRIVATE_DIRECTORY"*.aliases; do . "$i"; done
     fi
